@@ -11,7 +11,9 @@
       var h0 = document.createElement('div'); h0.id = 'sian-cart-head';
       h0.innerHTML = '<div class="s-ct"><h1>주문 완료</h1><ol class="s-steps2"><li><b>01</b>장바구니</li><li><b>02</b>주문서 작성</li><li class="on"><b>03</b>주문 완료</li></ol></div>' +
         '<div class="s-cnote"><b>주문이 접수되었습니다</b>유해화학물질이 포함된 주문은 구매자격(증빙·사용 용도) 확인 후 발송합니다. MSDS는 상품 상세에서 내려받을 수 있습니다.</div>';
-      c0.insertBefore(h0, c0.firstChild); return;
+      var fr = document.getElementById('frm_order_result'), sh = document.getElementById('sian-head');   // 주문 완료는 #contents가 없음 -> 주문 결과 양식 앞(머리글 아래)
+      if (fr) fr.parentNode.insertBefore(h0, fr); else if (sh) sh.parentNode.insertBefore(h0, sh.nextSibling); else c0.insertBefore(h0, c0.firstChild);
+      return;
     }
     var f = document.getElementById('frm_order_act'); if (!f) return setTimeout(run, 80);
     var esc = S.esc;
