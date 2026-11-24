@@ -1,7 +1,7 @@
 /* 공통 머리글 (작업 스킨, 카페24 스크립트 태그) */
 (function () {
   if (window.SIAN_SHELL) return; window.SIAN_SHELL = 1;
-  var B = (document.currentScript && document.currentScript.src.split('shop/')[0]) || 'https://triorabbits-shin.github.io/sian-shop/';
+  var B = 'https://triorabbits-shin.github.io/sian-shop/';
   var P = (location.pathname.match(/^\/skin-skin\d+/) || [''])[0];   // 미리보기 주소면 /skin-skinN 유지
   window.SIAN = { B: B, P: P };
   var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = B + 'shop/sian_shop.css?v=' + Date.now().toString().slice(0, 7); document.head.appendChild(css);
