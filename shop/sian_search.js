@@ -31,7 +31,7 @@
         var pr = it.price ? '<del>' + won(it.was) + '</del><b>' + won(it.price) + '</b>' : '<b>가격문의</b>';
         var st = !it.price ? '<span class="s-st0">문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
         var doc = it.murl ? '<a class="s-doc2" href="' + it.murl + '" target="_blank">MSDS</a>' : '<span class="s-doc2 off">MSDS</span>';
-        var buy = link && it.price && it.ok ? '<a class="s-cart" href="' + link + '">담기</a>' : '<span class="s-cart off">' + (it.price ? '품절' : '문의') + '</span>';
+        var buy = !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : !it.price ? '<a class="s-cart q" href="' + link + '">문의</a>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : '<a class="s-cart" href="' + link + '">담기</a>';
         return '<tr><td>' + (it.hz === 'Y' ? '<span class="s-tag hz">◆ 유해</span>' : '<span class="s-tag ok">◇ 일반</span>') + '<div class="s-mk3">' + esc(it.maker) + '</div></td>' +
           '<td class="s-cd">' + esc(it.pk) + '</td><td class="s-cd">' + esc(it.cas || '-') + '</td><td>' + nm + '<div class="s-sub2">' + esc([it.content, it.state].filter(Boolean).join(' · ')) + '</div></td>' +
           '<td>' + esc(it.grade || '-') + '</td><td>' + esc(it.packing || '-') + '</td><td class="s-pr2">' + pr + '</td><td>' + st + '</td><td>' + doc + '</td><td>' + buy + '</td></tr>';

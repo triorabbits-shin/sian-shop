@@ -136,6 +136,7 @@
 .s-st0{color:var(--s-sub)}
 .s-doc2{border:1px solid #cfd6e0;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap}
 .s-doc2.off{color:#b8bfc9;background:#f5f6f8}
+#sian-home .s-cart.q{background:#fff;color:var(--s-navy);border:1px solid var(--s-navy)}
 #sian-home .s-cart{background:var(--s-navy);color:#fff;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;white-space:nowrap}
 .s-cart.off{background:#eef0f3;color:#9aa4b2;border-radius:6px;padding:5px 12px;font-size:12px}
 @media (max-width:900px){
