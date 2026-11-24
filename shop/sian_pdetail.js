@@ -62,8 +62,13 @@
         box.querySelectorAll('[data-q]').forEach(function (b) { b.onclick = function () { setQ((+q.value || 1) + +b.dataset.q); }; });
         q.onchange = function () { setQ(q.value); };
         var off = !me.price || !me.ok || me.stock === '재고없음';
-        box.querySelectorAll('.s-bb button').forEach(function (b) {
-          if (off) { b.disabled = true; b.textContent = me.price ? '재고없음' : '가격문의'; return; }
+        box.querySelectorAll('.s-bb button').forEach(function (b, i) {
+          if (!me.price) {   // 가격문의: 첫 단추는 문의 게시판으로, 둘째는 숨김
+            if (i) { b.style.display = 'none'; return; }
+            b.textContent = '가격·납기 문의'; b.style.gridColumn = '1 / 3';
+            b.onclick = function () { location.href = P + '/board/inquiry/write.html?product_no=' + me.no; }; return;
+          }
+          if (off) { b.disabled = true; b.textContent = '재고없음'; return; }
           b.onclick = function () { var t = document.getElementById(b.className === 'c' ? 'actionCart' : 'actionBuy'); if (t) t.click(); };
         });
       });
