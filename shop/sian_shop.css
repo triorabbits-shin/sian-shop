@@ -211,6 +211,19 @@
 .sian-on #contents .ec-base-box{border-radius:14px!important;border-color:var(--s-line)!important}
 .sian-on #contents .xans-myshop-asyncbankbook,.sian-on #contents .xans-myshop-orderstate{border:1px solid var(--s-line);border-radius:14px;overflow:hidden}
 .sian-on #contents .xans-member-login .login,.sian-on #contents .ec-base-tab{border-radius:14px}
+/* 모바일 다듬기 (2026-11-24 점검) */
+@media (max-width:900px){
+ #sian-head .s-top .s-links{display:none}
+ #sian-head .s-top .s-in{height:30px;font-size:11px;white-space:nowrap;overflow:hidden}
+ .s-ttl{font-size:20px!important;margin-top:12px!important}
+ .s-ban{min-height:0!important;padding:14px 16px!important;gap:12px!important}
+ .s-ban img{width:64px!important;height:80px!important}
+ .s-ban b{font-size:20px!important}
+ .s-ct{flex-direction:column;align-items:flex-start;gap:10px}
+ .s-ct h1{font-size:22px!important}
+ #sian-pd{padding:12px 16px 16px!important}
+}
+#sian-detail table.t{display:block;overflow-x:auto;max-width:100%}
 
 .sian-pd-on .detailArea{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 #sian-pd,#sian-pd *{box-sizing:border-box}
