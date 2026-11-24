@@ -183,6 +183,7 @@
 .s-cguide h3{font-size:16px;color:var(--s-navy);margin:0 0 8px}
 .s-cguide ul{margin:0;padding:14px 18px 14px 34px;border:1px solid var(--s-line);border-radius:12px;background:#f6f8fc;color:#4a5566;font-size:13px}
 .s-cguide li{margin:3px 0}
+.sian-basket #contents>.path,.sian-basket #contents>.titleArea,.sian-basket #contents>.ec-base-step,.sian-basket #contents>.xans-order-basketguide{display:none!important}
 
 .sian-pd-on .detailArea{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 #sian-pd,#sian-pd *{box-sizing:border-box}
