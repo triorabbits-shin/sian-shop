@@ -50,9 +50,9 @@
 .s-desk .s-mk span{font-size:11px;opacity:.75}
 .s-desk .s-btns{display:flex;gap:8px;margin-top:16px}
 .s-btn{display:inline-block;border-radius:10px;padding:10px 18px;font-weight:700;font-size:14px;border:1px solid transparent}
-.s-btn.w{background:#fff;color:var(--s-navy)}
-.s-btn.o{border-color:#ffffff66;color:#fff}
-.s-btn.b{background:var(--s-blue);color:#fff}
+#sian-home .s-btn.w{background:#fff;color:var(--s-navy)}
+#sian-home .s-btn.o{border-color:#ffffff66;color:#fff}
+#sian-home .s-btn.b{background:var(--s-blue);color:#fff}
 .s-stats{background:var(--s-navy)}
 .s-stats .s-in{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
 .s-stats div.s-st{padding:22px 20px;border-left:1px solid #ffffff1f;color:#fff}
