@@ -191,6 +191,22 @@
 .sian-order .ec-base-fold>.title{background:#f3f6fb;border-bottom:1px solid var(--s-line)}
 .sian-order .ec-base-fold>.title h2{color:var(--s-navy)!important;font-weight:800!important}
 .sian-order #btn_payment{background:var(--s-navy)!important;border-color:var(--s-navy)!important;border-radius:12px!important;font-weight:800!important}
+.sian-order #mCafe24Order{padding-top:0!important;background:transparent!important}
+.sian-order .billingNshipping{margin-top:0!important}
+
+/* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
+.sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
+.sian-on #contents .titleArea h2,.sian-on #contents .titleArea h1{color:var(--s-navy)!important;font-weight:800!important;letter-spacing:-.02em}
+.sian-on #contents .path{font-size:12px}
+.sian-on #contents .btnSubmit,.sian-on #contents .btnSubmitFix,.sian-on #contents .btnEm{background:var(--s-navy)!important;border-color:var(--s-navy)!important;color:#fff!important;border-radius:10px!important}
+.sian-on #contents .btnNormal,.sian-on #contents .btnBasic{border-radius:10px!important}
+.sian-on #contents input[type=text],.sian-on #contents input[type=password],.sian-on #contents input[type=email],.sian-on #contents input[type=tel],.sian-on #contents select{border-radius:8px!important;border-color:#cfd6e0!important}
+.sian-on #contents input:focus,.sian-on #contents select:focus{border-color:var(--s-blue)!important;outline:none;box-shadow:0 0 0 3px #1d5fd122}
+.sian-on #contents .ec-base-table table{border-radius:12px;overflow:hidden}
+.sian-on #contents .ec-base-table th{background:#f3f6fb!important;color:#2b3a52}
+.sian-on #contents .ec-base-box{border-radius:14px!important;border-color:var(--s-line)!important}
+.sian-on #contents .xans-myshop-asyncbankbook,.sian-on #contents .xans-myshop-orderstate{border:1px solid var(--s-line);border-radius:14px;overflow:hidden}
+.sian-on #contents .xans-member-login .login,.sian-on #contents .ec-base-tab{border-radius:14px}
 
 .sian-pd-on .detailArea{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 #sian-pd,#sian-pd *{box-sizing:border-box}
