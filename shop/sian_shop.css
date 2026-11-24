@@ -145,7 +145,7 @@
 
 .s-atlas{background:radial-gradient(circle at 70% 40%,#13305a,#030914 70%);color:#fff;padding:60px 0}
 .s-atlas .s-in{display:grid;grid-template-columns:340px minmax(0,1fr);gap:30px;align-items:center}
-.s-atlas h2{font-size:28px;margin:10px 0;line-height:1.35;color:#fff}
+.s-atlas h2{font-size:24px;margin:10px 0;line-height:1.4;color:#fff;word-break:keep-all}
 .s-atlas p{opacity:.75;margin:0 0 16px;font-size:13px}
 .s-atll{display:flex;flex-direction:column;gap:6px}
 .s-atll>b{font-size:18px;color:#ffd24d;margin-bottom:4px}

@@ -28,11 +28,11 @@
         '<div class="s-btns"><a class="s-btn w" href="#s-makers">전체 메이커</a><a class="s-btn o" href="' + P + '/board/free/list.html?board_no=6">견적 문의</a></div></div></div></section>' +
         '<section class="s-stats"><div class="s-in">' + H.stats.map(function (s) { return '<div class="s-st"><small>' + esc(s[0]) + '</small><b>' + esc(s[1]) + '</b></div>'; }).join('') + '</div></section>' +
         (function () {
-          var spots = { '한국': [127, 37], '일본': [139, 36], '미국': [-98, 39], '유럽': [10, 50], '기타': [100, 15] };
+          var spots = { '미국': [18, 40], '유럽': [46, 30], '기타': [66, 62], '한국': [79, 42], '일본': [91, 38] };   // 지도 위 자리(%) 손으로 배치(겹치지 않게)
           var tot = {}; H.makers.forEach(function (m) { tot[m.country] = (tot[m.country] || 0) + m.n; });
           var max = Math.max.apply(null, Object.keys(tot).map(function (k) { return tot[k]; }));
           var dots = Object.keys(spots).map(function (r) {
-            var x = (spots[r][0] + 180) / 360 * 100, y = (90 - spots[r][1]) / 180 * 100, sz = 14 + 30 * Math.sqrt((tot[r] || 0) / max);
+            var x = spots[r][0], y = spots[r][1], sz = 14 + 30 * Math.sqrt((tot[r] || 0) / max);
             return '<button class="s-dot" data-r="' + r + '" style="left:' + x + '%;top:' + y + '%;width:' + sz + 'px;height:' + sz + 'px"><span>' + r + '<b>' + (tot[r] || 0).toLocaleString() + '</b></span></button>';
           }).join('');
           return '<section class="s-atlas"><div class="s-in"><div class="s-atl"><span class="s-kicker" style="color:#9cc2ff;border-color:#9cc2ff">MAKER ATLAS</span>' +
