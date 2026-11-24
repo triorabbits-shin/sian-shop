@@ -12,7 +12,7 @@
     c.insertBefore(box, c.firstChild);
     var Q = (new URLSearchParams(location.search).get('keyword') || '').trim();
     fetch(S.B + 'shop/search.json?v=' + Date.now().toString().slice(0, 7)).then(function (r) { return r.json(); }).then(function (rows) {
-      var items = rows.map(function (r) { return { pk: r[0], name: r[1], syn: r[2], cas: r[3], maker: r[4], grade: r[5], content: r[6], packing: r[7], state: r[8], hz: r[9], sup: r[10],
+      var items = rows.map(function (r) { return { variant: r[19], pk: r[0], name: r[1], syn: r[2], cas: r[3], maker: r[4], grade: r[5], content: r[6], packing: r[7], state: r[8], hz: r[9], sup: r[10],
         was: r[11], price: r[12], rate: r[13], stock: r[14], ok: r[15], msds: r[16], no: r[17], murl: r[18], own: !!OWN[r[4]] }; });
       items.forEach(function (it) { it.h = [it.name, it.syn, it.cas, it.pk, it.maker, it.grade, it.content].join('\n').toLowerCase(); });
       var toks = Q.toLowerCase().split(/\s+/).filter(Boolean), ql = Q.toLowerCase();
@@ -31,7 +31,7 @@
         var pr = it.price ? '<del>' + won(it.was) + '</del><b>' + won(it.price) + '</b>' : '<b>가격문의</b>';
         var st = !it.price ? '<span class="s-st0">문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
         var doc = it.murl ? '<a class="s-doc2" href="' + it.murl + '" target="_blank">MSDS</a>' : '<span class="s-doc2 off">MSDS</span>';
-        var buy = !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : !it.price ? '<a class="s-cart q" href="' + link + '">문의</a>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : '<a class="s-cart" href="' + link + '">담기</a>';
+        var buy = !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : !it.price ? '<a class="s-cart q" href="' + link + '">문의</a>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : (it.hz === 'Y' || !it.variant ? '<a class="s-cart" href="' + link + '" title="유해화학물질은 상세에서 본인인증 후 담기">담기</a>' : '<button type="button" class="s-cart" data-add="' + it.pk + '">담기</button>');
         return '<tr><td>' + (it.hz === 'Y' ? '<span class="s-tag hz">◆ 유해</span>' : '<span class="s-tag ok">◇ 일반</span>') + '<div class="s-mk3">' + esc(it.maker) + '</div></td>' +
           '<td class="s-cd">' + esc(it.pk) + '</td><td class="s-cd">' + esc(it.cas || '-') + '</td><td>' + nm + '<div class="s-sub2">' + esc([it.content, it.state].filter(Boolean).join(' · ')) + '</div></td>' +
           '<td>' + esc(it.grade || '-') + '</td><td>' + esc(it.packing || '-') + '</td><td class="s-pr2">' + pr + '</td><td>' + st + '</td><td>' + doc + '</td><td>' + buy + '</td></tr>';
@@ -59,6 +59,10 @@
         box.firstChild.innerHTML = h;
         box.querySelectorAll('.s-chip').forEach(function (b) { b.onclick = function () { var g = b.dataset.g, v = b.dataset.v; SEL[g] = SEL[g] || new Set(); SEL[g].has(v) ? SEL[g].delete(v) : SEL[g].add(v); PAGE = { own: 1, imp: 1 }; draw(); }; });
         box.querySelectorAll('.s-pg button').forEach(function (b) { b.onclick = function () { PAGE[b.dataset.k] = +b.dataset.p; draw(); }; });
+        box.querySelectorAll('[data-add]').forEach(function (b) { b.onclick = function () {
+          var it = items.filter(function (x) { return x.pk === b.dataset.add; })[0]; b.disabled = true; b.textContent = '담는 중';
+          S.addCart([{ no: it.no, variant: it.variant, name: it.name, price: it.price, qty: 1 }]).then(function () { b.disabled = false; b.textContent = '담기'; });
+        }; });
       }
       draw();
     }).catch(function (e) { console.error('sian search', e); document.documentElement.classList.remove('sian-home'); });

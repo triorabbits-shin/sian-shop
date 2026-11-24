@@ -38,12 +38,15 @@
           right = '<div class="s-side"><div class="s-sh">같은 시약 · 포장 선택 <small>' + esc(me.maker) + ' · ' + esc(me.grade || '등급 없음') + '</small></div>' +
             sizes.map(function (x) {
               var cur = x.pk === pk;
-              return '<div class="s-sz' + (cur ? ' on' : '') + '"><div class="s-szl"><b>' + esc(x.packing || '-') + '</b><small>' + esc(x.pk) + '</small></div><div class="s-szm">' + esc(stockTxt(x)) + '</div>' +
+              var can = me.hz !== 'Y' && x.no && x.variant && x.price && x.ok && x.stock !== '재고없음';
+              return '<div class="s-sz' + (cur ? ' on' : '') + '">' + (me.hz !== 'Y' ? '<input type="checkbox" class="s-ck" data-pk="' + esc(x.pk) + '"' + (can ? (cur ? ' checked' : '') : ' disabled') + '>' : '') +
+                '<div class="s-szl"><b>' + esc(x.packing || '-') + '</b><small>' + esc(x.pk) + '</small></div><div class="s-szm">' + esc(stockTxt(x)) + '</div>' +
                 '<div class="s-szr">' + (x.price ? '<b>' + won(x.price) + '</b>' : '<b>문의</b>') +
                 (cur ? '' : (x.no ? '<a href="' + P + '/product/detail.html?product_no=' + x.no + '">보기</a>' : '<span>준비중</span>')) + '</div></div>';
             }).join('') +
             '<div class="s-buy">' + qty + '<div class="s-tot"><span>선택: ' + esc(me.packing) + '</span><b id="s-tot">' + (me.price ? won(me.price) : '가격문의') + '</b></div>' +
-            '<div class="s-bb"><button type="button" class="c">장바구니</button><button type="button" class="b">바로구매</button></div></div>' +
+            '<div class="s-bb"><button type="button" class="c">장바구니</button><button type="button" class="b">바로구매</button></div>' +
+            (me.hz !== 'Y' ? '<button type="button" class="s-multi">체크한 포장 모두 담기</button>' : '<div class="s-hzn">유해화학물질은 포장마다 상세 화면에서 본인인증 후 담습니다.</div>') + '</div>' +
             (others.length ? '<div class="s-oth">같은 물질 다른 메이커·등급 ' + others.length + '개 <a href="' + S.search(me.cas || me.name) + '">비교하기 →</a></div>' : '') + '</div>';
         } else {
           right = '<div class="s-side"><div class="s-sh">구매</div><div class="s-one"><div><small>' + esc(me.packing || '') + '</small><b>' + esc(stockTxt(me)) + '</b></div>' +
@@ -61,6 +64,13 @@
         var setQ = function (v) { v = Math.max(1, parseInt(v, 10) || 1); q.value = v; if (nq) { nq.value = v; nq.dispatchEvent(new Event('change', { bubbles: true })); } if (me.price) tot.textContent = won(me.price * v); };
         box.querySelectorAll('[data-q]').forEach(function (b) { b.onclick = function () { setQ((+q.value || 1) + +b.dataset.q); }; });
         q.onchange = function () { setQ(q.value); };
+        var mb = box.querySelector('.s-multi');
+        if (mb) mb.onclick = function () {
+          var picks = [].slice.call(box.querySelectorAll('.s-ck:checked')).map(function (c) { return sizes.filter(function (x) { return x.pk === c.dataset.pk; })[0]; })
+            .map(function (x) { return { no: x.no, variant: x.variant, name: x.name, price: x.price, qty: x.pk === pk ? (+q.value || 1) : 1 }; });
+          if (!picks.length) { S.toast('담을 포장을 체크해 주세요'); return; }
+          mb.disabled = true; S.addCart(picks).then(function () { mb.disabled = false; });
+        };
         var off = !me.price || !me.ok || me.stock === '재고없음';
         box.querySelectorAll('.s-bb button').forEach(function (b, i) {
           if (!me.price) {   // 가격문의: 첫 단추는 문의 게시판으로, 둘째는 숨김

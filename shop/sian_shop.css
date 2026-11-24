@@ -136,6 +136,9 @@
 .s-st0{color:var(--s-sub)}
 .s-doc2{border:1px solid #cfd6e0;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap}
 .s-doc2.off{color:#b8bfc9;background:#f5f6f8}
+#sian-home button.s-cart{border:0;cursor:pointer;font-family:inherit}
+.s-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0f2747;color:#fff;padding:12px 18px;border-radius:12px;z-index:99999;display:flex;gap:14px;align-items:center;font:14px 'Noto Sans KR',sans-serif;box-shadow:0 8px 24px #0004}
+.s-toast a{color:#ffd24d!important;font-weight:700;text-decoration:none}
 #sian-home .s-cart.q{background:#fff;color:var(--s-navy);border:1px solid var(--s-navy)}
 #sian-home .s-cart{background:var(--s-navy);color:#fff;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;white-space:nowrap}
 .s-cart.off{background:#eef0f3;color:#9aa4b2;border-radius:6px;padding:5px 12px;font-size:12px}
@@ -264,3 +267,9 @@
 .s-oth{padding:10px 16px;border-top:1px solid var(--s-line);font-size:13px;color:#4a5566;background:#fafbfd}
 #sian-pd .s-oth a{color:var(--s-blue);font-weight:700;margin-left:6px}
 @media (max-width:900px){.s-pdg{grid-template-columns:1fr}.s-info{grid-template-columns:repeat(2,minmax(0,1fr))}.s-side{position:static}}
+
+.s-sz{grid-template-columns:auto 1fr auto auto}
+.s-sz:not(:has(.s-ck)){grid-template-columns:1fr auto auto}
+.s-ck{width:16px;height:16px;accent-color:var(--s-navy)}
+.s-multi{width:100%;margin-top:8px;height:40px;border-radius:10px;border:1px dashed var(--s-navy);background:#f3f6fb;color:var(--s-navy);font-weight:700;cursor:pointer}
+.s-hzn{margin-top:8px;font-size:12px;color:var(--s-red)}
