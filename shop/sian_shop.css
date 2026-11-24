@@ -184,6 +184,13 @@
 .s-cguide ul{margin:0;padding:14px 18px 14px 34px;border:1px solid var(--s-line);border-radius:12px;background:#f6f8fc;color:#4a5566;font-size:13px}
 .s-cguide li{margin:3px 0}
 .sian-basket #contents>.path,.sian-basket #contents>.titleArea,.sian-basket #contents>.ec-base-step,.sian-basket #contents>.xans-order-basketguide{display:none!important}
+/* 주문서 */
+.sian-order #titleArea,.sian-order .titleArea{display:none!important}
+.sian-order #frm_order_act{max-width:1240px;margin:0 auto;padding:0 20px}
+.sian-order .ec-base-fold{border:1px solid var(--s-line)!important;border-radius:14px!important;background:#fff;margin-bottom:14px!important;overflow:hidden}
+.sian-order .ec-base-fold>.title{background:#f3f6fb;border-bottom:1px solid var(--s-line)}
+.sian-order .ec-base-fold>.title h2{color:var(--s-navy)!important;font-weight:800!important}
+.sian-order #btn_payment{background:var(--s-navy)!important;border-color:var(--s-navy)!important;border-radius:12px!important;font-weight:800!important}
 
 .sian-pd-on .detailArea{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 #sian-pd,#sian-pd *{box-sizing:border-box}
