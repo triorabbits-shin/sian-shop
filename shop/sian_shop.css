@@ -147,6 +147,43 @@
  .s-desk .s-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
+/* 장바구니 */
+#sian-cart-head,#sian-cart-head *,.s-cguide,.s-cguide *{box-sizing:border-box}
+#sian-cart-head,.s-cguide{font:14px/1.55 "Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;color:var(--s-text);max-width:1240px;margin:0 auto;padding:0 20px;text-align:left}
+#sian-cart-head{padding-top:24px}
+.s-ct{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--s-navy);padding-bottom:14px;margin-bottom:16px}
+.s-ct h1{font-size:28px;font-weight:800;color:var(--s-navy);margin:0}
+.s-steps2{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.s-steps2 li{border:1px solid var(--s-line);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--s-sub);background:#fff}
+.s-steps2 li b{margin-right:6px;color:#b8bfc9}
+.s-steps2 li.on{background:var(--s-navy);border-color:var(--s-navy);color:#fff}
+.s-steps2 li.on b{color:#ffd24d}
+.s-cnote{border:1px solid var(--s-line);background:#f6f8fc;border-radius:12px;padding:12px 16px;font-size:13px;color:#4a5566;margin-bottom:16px}
+.s-cnote b{display:block;color:var(--s-navy);margin-bottom:2px}
+.s-cnote.hz{background:#fff5f5;border-color:#f3c9c9}
+.s-cnote.hz b{color:var(--s-red)}
+.s-cempty{text-align:center;padding:80px 0}
+.s-cempty b{display:block;font-size:26px;color:var(--s-navy);margin-bottom:6px}
+.s-cempty span{display:block;color:var(--s-sub);margin-bottom:18px}
+.s-cempty a{display:inline-block;background:var(--s-navy);color:#fff!important;border-radius:10px;padding:10px 22px;font-weight:700;text-decoration:none}
+.sian-cart-empty #contents>*:not(#sian-cart-head){display:none!important}
+.sian-basket #contents{max-width:1240px;margin:0 auto}
+.sian-basket .xans-order-basketpackage{border:1px solid var(--s-line);border-radius:14px;padding:16px 20px;background:#fff;margin:0 20px 16px}
+.sian-basket .prdBox{border:1px solid var(--s-line)!important;border-radius:12px;padding:14px!important;margin-bottom:10px;background:#fff}
+.sian-basket .prdBox .prdName a{font-weight:700;color:var(--s-navy)!important;font-size:15px}
+.s-ctag{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:12px;align-items:center}
+.s-ctag>span{border:1px solid var(--s-line);border-radius:6px;padding:1px 7px;color:#4a5566;background:#fafbfd}
+.s-ctag>span.s-tag{border:0}
+.s-ctag a{border:1px solid #cfd6e0;border-radius:6px;padding:1px 8px;font-weight:700;color:var(--s-blue)!important;text-decoration:none}
+.sian-basket .cart-total,.sian-basket .totalSummary{border:2px solid var(--s-navy)!important;border-radius:14px;background:#fff}
+.sian-basket .totalSummary .total,.sian-basket .total_order_price_front{color:var(--s-red)!important;font-weight:800}
+.sian-basket [onclick*="orderAll"],.sian-basket [onclick*="orderSelectBasket"]{border-radius:10px!important}
+.sian-basket [onclick*="orderAll"]{background:var(--s-navy)!important;border-color:var(--s-navy)!important;color:#fff!important}
+.s-cguide{margin:24px auto 40px}
+.s-cguide h3{font-size:16px;color:var(--s-navy);margin:0 0 8px}
+.s-cguide ul{margin:0;padding:14px 18px 14px 34px;border:1px solid var(--s-line);border-radius:12px;background:#f6f8fc;color:#4a5566;font-size:13px}
+.s-cguide li{margin:3px 0}
+
 .sian-pd-on .detailArea{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 #sian-pd,#sian-pd *{box-sizing:border-box}
 #sian-pd{font:14px/1.55 "Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;color:var(--s-text);text-align:left;max-width:1240px;margin:0 auto;padding:16px 20px 24px}
