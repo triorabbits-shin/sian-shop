@@ -1,0 +1,139 @@
+#sian-detail{--navy:#0f2747;--blue:#1d5fd1;--blue2:#e9f1ff;--line:#e3e7ee;--bg:#f4f6f9;--text:#1c2430;--sub:#6b7685;--red:#d93a3a;--red2:#fff1f1;--green:#1f8a4c;--gray:#b8bfc9}
+#sian-detail, #sian-detail *{box-sizing:border-box}
+#sian-detail{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 "Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
+#sian-detail .src{display:none;font-size:11px;color:#7a5af8;background:#f3f0ff;border-radius:4px;padding:0 4px;margin-left:4px;font-weight:500;white-space:nowrap}
+#sian-detail .sug{display:inline-block;font-size:11px;color:#b25e00;background:#fff4e0;border-radius:4px;padding:0 5px;margin-left:4px;font-weight:600}
+#sian-detail .card{background:#fff;border:1px solid var(--line);border-radius:12px}
+#sian-detail .price .was{font-size:11px;color:var(--gray);text-decoration:line-through;display:block}
+#sian-detail .price .now{font-weight:800;color:var(--red)}
+#sian-detail .price .rate{font-size:11px;color:var(--red);margin-right:3px}
+#sian-detail .stock{font-weight:700;color:var(--green)}
+#sian-detail .stock.no{color:var(--red)}
+#sian-detail .stock small{display:block;font-weight:400;color:var(--sub);font-size:11px}
+#sian-detail .detail{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
+#sian-detail .hzbadge{border:1px solid #f2b8b8;background:var(--red2);color:var(--red);border-radius:6px;padding:4px 10px;font-size:13px;font-weight:700}
+#sian-detail h1.title{font-size:28px;margin:6px 0 2px;line-height:1.3}
+#sian-detail .infogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 20px;padding:16px 18px;margin-bottom:16px}
+#sian-detail .infogrid .k{font-size:12px;color:var(--sub)}
+#sian-detail .infogrid .v{font-weight:700}
+#sian-detail section.box{padding:18px;margin-bottom:16px}
+#sian-detail section.box h2{margin:0 0 12px;font-size:17px}
+#sian-detail section.hz{border-color:#f2b8b8}
+#sian-detail section.hz h2 em{color:var(--red);font-style:normal}
+#sian-detail table.t{width:100%;border-collapse:collapse;font-size:13px}
+#sian-detail table.t th{text-align:left;color:var(--sub);font-weight:600;border-bottom:1px solid var(--line);padding:7px 6px}
+#sian-detail table.t td{border-bottom:1px solid #eef0f4;padding:8px 6px;vertical-align:top}
+#sian-detail .res-y{color:var(--red);font-weight:800}
+#sian-detail .res-n{color:var(--sub)}
+#sian-detail .note{font-size:12px;color:var(--sub);margin-top:8px}
+#sian-detail .steps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#sian-detail .steps div{background:#eef3fb;border:1px solid #d6e2f5;border-radius:8px;padding:9px 12px}
+#sian-detail .steps b{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;margin-right:6px}
+#sian-detail dl.kv{display:grid;grid-template-columns:130px 1fr;margin:0;gap:0}
+#sian-detail dl.kv dt{color:var(--sub);padding:8px 0;border-bottom:1px solid #eef0f4;font-size:13px}
+#sian-detail dl.kv dd{margin:0;padding:8px 0;border-bottom:1px solid #eef0f4;white-space:pre-line}
+#sian-detail .synlist{line-height:1.9}
+#sian-detail .phys{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+#sian-detail .phys div{background:#f7f9fc;border-radius:8px;padding:8px 10px}
+#sian-detail .phys .k{font-size:12px;color:var(--sub)}
+#sian-detail .ghs{display:flex;gap:8px;margin:8px 0}
+#sian-detail .ghs img{width:64px;height:64px}
+#sian-detail .tabs{display:flex;border-bottom:2px solid var(--navy);margin-bottom:14px}
+#sian-detail .tabs span{padding:9px 18px;font-weight:700;color:var(--sub)}
+#sian-detail .tabs span.on{background:var(--navy);color:#fff;border-radius:8px 8px 0 0}
+#sian-detail .tabs span.off{color:var(--gray)}
+@media (max-width:900px){#sian-detail .detail{grid-template-columns:1fr}
+#sian-detail .infogrid{grid-template-columns:1fr 1fr}
+#sian-detail .phys{grid-template-columns:1fr 1fr}}
+#sian-detail .hzbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;border-radius:10px;padding:10px 14px;margin:0 0 16px;border:1px solid}
+#sian-detail .hzbar .main{font-weight:800;font-size:14px;border-radius:6px;padding:4px 12px;margin-right:4px}
+#sian-detail .hzbar .t{font-size:12px;font-weight:700;border-radius:14px;padding:3px 10px;border:1px solid}
+#sian-detail .hzbar .go{margin-left:auto;font-size:12px;font-weight:700}
+#sian-detail .hzbar .why{flex-basis:100%;font-size:12px;margin-top:2px}
+#sian-detail .hzbar .why2{font-size:12px;color:var(--sub);margin-left:4px}
+#sian-detail .hzbar.y{background:#fff5f5;border-color:#f2b8b8}
+#sian-detail .hzbar.y .main{background:#c62828;color:#fff}
+#sian-detail .hzbar.y .t{border-color:#f2b8b8;color:#c62828;background:#fff}
+#sian-detail .hzbar.y .t.auth{background:#c62828;color:#fff;border-color:#c62828}
+#sian-detail .hzbar.y .go,#sian-detail .hzbar.y .why{color:#c62828}
+#sian-detail .hzbar.n{background:#f2faf5;border-color:#bfe3cc}
+#sian-detail .hzbar.n .main{background:var(--green);color:#fff}
+#sian-detail .hzbar.n .go{color:var(--green)}
+#sian-detail .hzbar.u{background:#f7f8fa;border-color:var(--line)}
+#sian-detail .hzbar.u .main{background:#8c96a5;color:#fff}
+#sian-detail .hzbar .t.amber{border-color:#f3d19c;color:#b25e00;background:#fff8ec}
+#sian-detail .hzbar .t.sig{border-color:#1c2430;color:#1c2430;background:#fff}
+#sian-detail .ptiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#sian-detail .ptiles>div{background:#f7f9fc;border-radius:8px;padding:9px 12px}
+#sian-detail .ptiles .k{font-size:12px;color:var(--sub)}
+#sian-detail .ptiles .v{font-weight:700;margin-top:1px}
+#sian-detail .ptiles.phys2{grid-template-columns:repeat(4,1fr)}
+#sian-detail .ptiles.phys2 .v{font-weight:600}
+#sian-detail .psub{font-size:13px;font-weight:800;color:var(--navy);margin:16px 0 8px}
+#sian-detail .psub small{font-weight:400;color:var(--sub);margin-left:4px}
+#sian-detail .syntags{display:flex;flex-wrap:wrap;gap:6px}
+#sian-detail .syntags span{border:1px solid var(--line);background:#fff;border-radius:14px;padding:3px 10px;font-size:13px}
+@media (max-width:900px){#sian-detail .ptiles,#sian-detail .ptiles.phys2{grid-template-columns:1fr 1fr}}
+#sian-detail .jbox .jt{font-size:17px;font-weight:800}
+#sian-detail .jbox .js{font-size:13px;color:var(--sub);margin:2px 0 10px}
+#sian-detail .jchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+#sian-detail .jchips span{border-radius:16px;padding:5px 14px;font-size:13px;font-weight:700;background:#eef0f3;color:#6b7280}
+#sian-detail .jchips span.y{background:#fde8e8;color:#c62828}
+#sian-detail .jmeter{border:1px solid var(--line);border-radius:10px;padding:34px 28px 12px;margin-bottom:14px;background:#fcfcfd}
+#sian-detail .jmeter .bar{position:relative;height:12px;border-radius:6px;background:#e8eaee}
+#sian-detail .jmeter .fill{position:absolute;top:0;bottom:0;right:0;border-radius:0 6px 6px 0;background:#f2b8b8}
+#sian-detail .jmeter .tick{position:absolute;top:-6px;bottom:-6px;width:2px;background:#c62828;transform:translateX(-1px)}
+#sian-detail .jmeter .tick span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11px;font-weight:800;color:#c62828;padding-bottom:3px}
+#sian-detail .jmeter .dot{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:#1c2430;border:3px solid #fff;box-shadow:0 0 0 1px #1c2430;transform:translate(-50%,-50%)}
+#sian-detail .jmeter .dot span{position:absolute;bottom:150%;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:12px;font-weight:800;color:#1c2430}
+#sian-detail .jmeter .scale{position:relative;height:18px;margin-top:8px}
+#sian-detail .jmeter .scale span{position:absolute;transform:translateX(-50%);font-size:11px;color:var(--sub)}
+#sian-detail .jlist{display:flex;flex-direction:column;gap:8px}
+#sian-detail .jitem{border-left:4px solid #c62828;background:#f8f9fb;border-radius:0 8px 8px 0;padding:10px 14px}
+#sian-detail .jitem .h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#sian-detail .jitem .r{color:#c62828;font-size:13px;font-weight:800}
+#sian-detail .jitem small{color:var(--sub);font-size:11px}
+#sian-detail .jitem .d{font-size:13px;color:#3a4656;margin-top:2px}
+#sian-detail .jitem.off{border-left-color:#c5cbd3}
+#sian-detail .jitem.off .r{color:var(--sub)}
+#sian-detail .gcards{display:flex;flex-wrap:wrap;gap:10px}
+#sian-detail .gcard{display:flex;align-items:center;gap:14px;border:1px solid #d6e2f5;background:#f5f8fe;border-radius:10px;padding:12px 16px;min-width:240px;flex:1}
+#sian-detail .gcard .gcode{min-width:56px;height:56px;padding:0 8px;border-radius:10px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:17px;letter-spacing:.02em}
+#sian-detail .gcard .gkr{font-size:17px;font-weight:800;color:var(--text)}
+#sian-detail .gcard .gen{font-size:13px;color:var(--sub)}
+#sian-detail .gcard.none{background:#f7f8fa;border-color:var(--line)}
+#sian-detail .gcard.none .gcode{background:#8c96a5}
+#sian-detail .gall{margin-top:12px;border:1px solid var(--line);border-radius:8px}
+#sian-detail .gall summary{cursor:pointer;padding:10px 14px;font-weight:700;font-size:13px;list-style:none}
+#sian-detail .gall summary::-webkit-details-marker{display:none}
+#sian-detail .gall summary::before{content:'▸';display:inline-block;width:14px;color:var(--sub)}
+#sian-detail .gall[open] summary::before{content:'▾'}
+#sian-detail .gall[open] summary{border-bottom:1px solid #eef0f4}
+#sian-detail .gall table.t{margin:0}
+#sian-detail .gall table.t th,#sian-detail .gall table.t td{padding:8px 14px}
+#sian-detail .gcard .guse{font-size:12px;color:#3a4656;margin-top:3px}
+#sian-detail .gladder{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px;font-size:13px}
+#sian-detail .gladder .lbl{color:var(--sub);font-size:12px;margin-right:4px}
+#sian-detail .gladder span:not(.lbl):not(.lo){border:1px solid var(--line);border-radius:16px;padding:3px 10px;background:#fff}
+#sian-detail .gladder span b{margin-right:4px}
+#sian-detail .gladder span.on:not(.lbl):not(.lo){background:var(--navy);border-color:var(--navy);color:#fff}
+#sian-detail .gladder i{color:var(--gray);font-style:normal}
+#sian-detail .gladder .lo{color:var(--sub);font-size:11px;margin-left:4px}
+#sian-detail .gall summary small{color:var(--sub);font-weight:400;margin-left:4px}
+#sian-detail .gall tr.grp td{background:#f4f6f9;color:var(--navy);font-weight:800;font-size:12px;letter-spacing:.02em;padding:6px 14px}
+#sian-detail .gall td.en{color:var(--sub)}
+#sian-detail .gall tr.on td{background:var(--blue2)}
+#sian-detail .gall tr.on td:first-child{box-shadow:inset 3px 0 0 var(--blue)}
+#sian-detail .ws{position:relative;outline:2px dashed #e08a00;outline-offset:3px}
+#sian-detail .ws>.wstag{position:absolute;top:-12px;left:6px;margin:0;z-index:2}
+#sian-detail .expo{display:flex;flex-direction:column;gap:8px}
+#sian-detail .expo details{border:1px solid var(--line);border-radius:8px;background:#fff}
+#sian-detail .expo summary{cursor:pointer;padding:10px 14px;font-weight:700;font-size:13px;list-style:none}
+#sian-detail .expo summary::-webkit-details-marker{display:none}
+#sian-detail .expo summary::before{content:'▸';display:inline-block;width:14px;color:var(--sub)}
+#sian-detail .expo details[open] summary::before{content:'▾'}
+#sian-detail .expo details[open] summary{border-bottom:1px solid #eef0f4}
+#sian-detail .expo p{margin:0;padding:10px 14px;white-space:pre-line;font-size:13px}
+#sian-detail{background:transparent;font-size:14px;line-height:1.5;text-align:left}
+#sian-detail .src,#sian-detail .sug,#sian-detail .wstag{display:none!important}
+#sian-detail .box{margin:0 0 16px}
