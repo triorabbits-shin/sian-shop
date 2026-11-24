@@ -100,8 +100,8 @@
         if (fail) { clearInterval(t); box.querySelector('span').textContent = fail; return; }
         if (done && done >= start) {
           clearInterval(t);
-          var when = new Date(done), pad = function (n) { return String(n).padStart(2, '0'); };
-          var stamp = when.getFullYear() + '-' + pad(when.getMonth() + 1) + '-' + pad(when.getDate()) + ' ' + pad(when.getHours()) + ':' + pad(when.getMinutes());
+          var k = new Date(done).toLocaleString('sv-SE', { timeZone: 'Asia/Seoul' });   // 한국 시간 'YYYY-MM-DD HH:MM:SS'
+          var stamp = k.slice(0, 16) + ' (KST)';
           delete pay.dataset.sianLock; pay.classList.remove('s-locked'); pay.innerHTML = label;
           box.className = 's-auth ok'; box.innerHTML = '<b>✓ 본인인증 완료</b><span>' + stamp + ' 휴대폰 본인인증. 이 기록은 주문과 함께 저장됩니다.</span>';
           var sel = document.getElementById('omessage_select'), ta = document.getElementById('omessage');
