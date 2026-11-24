@@ -76,14 +76,16 @@
     var pm = document.getElementById('ec-jigsaw-area-paymethod'); if (!pm || document.getElementById('s-purpose')) return;
     var pu = document.createElement('div'); pu.id = 's-purpose'; pu.className = 's-purpose';
     pu.innerHTML = '<h2>주문 목적 <em>필수</em></h2>' +
-      '<div class="s-pnot"><b>NOTICE · 화학물질관리법</b>「화학물질관리법」에 따라 이 쇼핑몰의 시약은 <b>연구 · 분석 · 검사</b> 목적으로만 판매합니다. ' +
-      '세 가지 중 하나를 선택해야 결제할 수 있으며, 선택한 목적 외의 용도로 사용할 수 없습니다.</div>' +
+      '<div class="s-pnot"><b>NOTICE · 「화학물질관리법」 제29조의2제1항 및 같은 법 시행규칙 제31조의2에 따른 고지</b>' +
+      '<ol><li>시험용·연구용·검사용 시약은 <b>해당 용도로만</b> 사용하여야 합니다.</li><li>취급 시 유해화학물질 취급기준을 준수하여야 합니다.</li>' +
+      '<li>판매하는 화학물질이 유해화학물질등에 해당하는지는 상품마다 표시합니다.</li><li>용도제한이 있는 물질은 그 용도로 취급하지 말거나 그 용도로만 취급하여야 합니다.</li></ol>' +
+      '아래 세 가지 중 주문 목적을 하나 선택해야 결제할 수 있습니다.</div>' +
       '<div class="s-pch">' + ['연구', '분석', '검사'].map(function (v) { return '<label><input type="radio" name="s_purpose" value="' + v + '"> <b>' + v + '</b></label>'; }).join('') + '</div>';
     pm.parentNode.insertBefore(pu, pm);
     pu.addEventListener('change', function () {
       var v = (pu.querySelector('[name=s_purpose]:checked') || {}).value || '';
       LOCK.purpose = !v; pu.classList.toggle('ok', !!v);
-      msgLine('구매목적', v ? v + ' (화학물질관리법에 따른 연구·분석·검사 목적 외 사용 불가 고지 확인)' : '');
+      msgLine('구매목적', v ? v + ' (화학물질관리법 제29조의2제1항 고지 확인)' : '');
       applyLock();
     });
   }
@@ -117,7 +119,7 @@
     var pay = document.getElementById('btn_payment'); if (!pay || document.getElementById('s-auth')) return;
     var P = window.SIAN.P, member = !/비회원/.test(((document.querySelector('.billingNshipping') || {}).innerText || '')) && !document.querySelector('[name=order_password], #order_password');
     var box = document.createElement('div'); box.id = 's-auth'; box.className = 's-auth';
-    box.innerHTML = '<b>본인인증 필요 · 유해화학물질 ' + hz + '개</b><span>유해화학물질이 포함된 주문은 주문할 때마다 휴대폰 본인인증을 해야 결제할 수 있습니다.' +
+    box.innerHTML = '<b>본인인증 필요 · 유해화학물질 ' + hz + '개</b><span>「화학물질관리법」 제28조의2제1항에 따라 유해화학물질을 통신판매할 때는 구매자 실명·연령 확인 및 본인 인증을 거쳐야 합니다(같은 법 시행규칙 제30조의2제3호: 본인확인기관을 통한 본인확인). 주문할 때마다 휴대폰 본인인증을 해야 결제할 수 있습니다.' +
       (member ? '' : ' 회원 로그인 후 인증할 수 있습니다.') + '</span>' +
       (member ? '<button type="button">휴대폰 본인인증</button>' : '<a class="s-authlogin" href="' + P + '/member/login.html?returnUrl=' + encodeURIComponent(location.pathname + location.search) + '">로그인</a>');
     pay.parentNode.insertBefore(box, pay);
@@ -138,7 +140,7 @@
           var stamp = new Date(done).toLocaleString('sv-SE', { timeZone: 'Asia/Seoul' }).slice(0, 16) + ' (KST)';
           LOCK.auth = false; applyLock();
           box.className = 's-auth ok'; box.innerHTML = '<b>✓ 본인인증 완료</b><span>' + stamp + ' 휴대폰 본인인증. 이 기록은 주문과 함께 저장됩니다.</span>';
-          msgLine('본인인증', '휴대폰 본인인증 완료 ' + stamp + ' (유해화학물질 ' + hz + '개 주문)');
+          msgLine('본인인증', '휴대폰 본인인증 완료 ' + stamp + ' (유해화학물질 ' + hz + '개 주문, 화학물질관리법 제28조의2)');
         }
       }, 700);
     };
