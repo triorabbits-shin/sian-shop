@@ -4,7 +4,7 @@
   var B = 'https://triorabbits-shin.github.io/sian-shop/';
   var P = (location.pathname.match(/^\/skin-skin\d+/) || [''])[0];   // 미리보기 주소면 /skin-skinN 유지
   window.SIAN = { B: B, P: P };
-  var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = B + 'shop/sian_shop.css?v=' + Date.now().toString().slice(0, 7); document.head.appendChild(css);
+  var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = B + 'shop/sian_shop.css?v=' + Date.now(); document.head.appendChild(css);
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   window.SIAN.esc = esc;
   window.SIAN.search = function (q) { return P + '/product/search.html?keyword=' + encodeURIComponent(q); };
