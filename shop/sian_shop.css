@@ -237,6 +237,17 @@
 #btn_payment.s-locked{background:#c8ced8!important;border-color:#c8ced8!important;cursor:not-allowed}
 @media (max-width:900px){.s-cinst{flex-direction:column;align-items:flex-start}.s-bi-r{flex-direction:column;align-items:flex-start}}
 #sian-cart-head .s-authlogin,.s-auth .s-authlogin{background:var(--s-navy);color:#fff!important;border-radius:8px;padding:9px 16px;font-weight:800;text-decoration:none}
+/* 주문 목적(필수) + 화학물질관리법 안내 (2026-11-25) */
+.s-purpose{border:2px solid var(--s-navy);border-radius:14px;background:#fff;margin-bottom:14px;padding:16px 20px;font:14px "Noto Sans KR",sans-serif}
+.s-purpose.ok{border-color:var(--s-green)}
+.s-purpose h2{font-size:18px;color:var(--s-navy);margin:0 0 10px;font-weight:800}
+.s-purpose h2 em{font-style:normal;font-size:11px;background:var(--s-red);color:#fff;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.s-pnot{background:#fff8e6;border:1px solid #f0d48a;border-radius:10px;padding:10px 14px;font-size:13px;color:#4a4020;margin-bottom:12px}
+.s-pnot b:first-child{display:block;color:#a06a00;letter-spacing:.04em;margin-bottom:2px}
+.s-pch{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.s-pch label{border:1px solid #cfd6e0;border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:15px}
+.s-pch label:has(input:checked){border-color:var(--s-navy);background:#eef4ff;box-shadow:inset 0 0 0 1px var(--s-navy)}
+.s-pch input{accent-color:var(--s-navy)}
 
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
