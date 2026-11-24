@@ -135,7 +135,7 @@
   "price/DJ.json": "e317a85dbb8f",
   "price/DSP.json": "2c6cb93e1ecf",
   "price/SJ.json": "a195ee65fd4e",
-  "price/delta.json": "524eb915c08c",
+  "price/delta.json": "014c0d40f20e",
   "product/DJ_00.json": "f23c3d96e34f",
   "product/DJ_01.json": "bfc650a46a5c",
   "product/DJ_02.json": "89bc0f948822",
@@ -285,6 +285,6 @@
   },
   "substance": 8
  },
- "updated": "2026-11-24 17:48:12",
- "version": "043bd537bf7b"
+ "updated": "2026-11-24 18:51:22",
+ "version": "98f070d893ab"
 }
