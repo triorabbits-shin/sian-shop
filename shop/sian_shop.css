@@ -236,6 +236,7 @@
 .s-auth.ok b{color:var(--s-green)}
 #btn_payment.s-locked{background:#c8ced8!important;border-color:#c8ced8!important;cursor:not-allowed}
 @media (max-width:900px){.s-cinst{flex-direction:column;align-items:flex-start}.s-bi-r{flex-direction:column;align-items:flex-start}}
+#sian-cart-head .s-authlogin,.s-auth .s-authlogin{background:var(--s-navy);color:#fff!important;border-radius:8px;padding:9px 16px;font-weight:800;text-decoration:none}
 
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}

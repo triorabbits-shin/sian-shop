@@ -72,28 +72,47 @@
     if (hz) sync();
   }
 
-  /* 유해화학물질 결제 전 본인인증 (2026-11-25, 사용자 지시). 본인인증이 끝나기 전에는 결제 단추를 막음.
-     실제 인증은 카페24 휴대폰·아이핀 본인인증 서비스(가입 필요)로 함: window.SIAN_AUTH = {url: '본인인증 화면 주소'} 가 정해지면 그 창을 열고,
-     인증이 끝나면 카페24가 돌려주는 상태(sessionStorage 'sian_auth_ok')로 결제를 엶. 서비스 연결 전에는 안내만 하고 결제를 막음 */
+  /* 유해화학물질 결제 전 본인인증 (2026-11-25, 사용자 지시: 성인인증이 아니라 본인인증, 주문할 때마다, 카페24 본인인증, 기록 저장).
+     흐름: 결제 단추 잠금 -> '휴대폰 본인인증' -> 카페24 회원정보수정 화면을 작은 창(#sian-auth)으로 열면 sian_shell.js가 카페24 '휴대폰인증'을 눌러 줌
+     -> 인증이 끝나면(인증여부 '인증'으로 바뀜) 그 창이 localStorage 'sian_auth_done' = 시각 을 남기고 닫힘
+     -> 이 주문서에서 단추를 누른 뒤의 시각이면 결제 잠금 해제 + 주문 메시지에 [본인인증] 기록. 지난번 인증은 인정 안 함.
+     카페24 본인인증 서비스(휴대폰·아이핀) 가입 전에는 카페24 단추가 비어 있어 인증이 진행되지 않음 -> 안내만 하고 잠금 유지 */
   function authGate(hz) {
     var pay = document.getElementById('btn_payment'); if (!pay || document.getElementById('s-auth')) return;
-    var ok = false; try { ok = sessionStorage.getItem('sian_auth_ok') === '1'; } catch (e) { }
-    var conf = window.SIAN_AUTH || {};
-    var box = document.createElement('div'); box.id = 's-auth'; box.className = 's-auth' + (ok ? ' ok' : '');
-    box.innerHTML = '<b>' + (ok ? '✓ 본인인증 완료' : '본인인증 필요 · 유해화학물질 ' + hz + '개') + '</b><span>' +
-      (ok ? '결제를 진행할 수 있습니다.' : '유해화학물질이 포함된 주문은 휴대폰 본인인증을 마친 뒤 결제할 수 있습니다.') + '</span>' +
-      (ok ? '' : '<button type="button">휴대폰 본인인증</button>');
+    var P = window.SIAN.P, member = !/비회원/.test(((document.querySelector('.billingNshipping') || {}).innerText || '')) && !document.querySelector('[name=order_password], #order_password');
+    var box = document.createElement('div'); box.id = 's-auth'; box.className = 's-auth';
+    box.innerHTML = '<b>본인인증 필요 · 유해화학물질 ' + hz + '개</b><span>유해화학물질이 포함된 주문은 주문할 때마다 휴대폰 본인인증을 해야 결제할 수 있습니다.' +
+      (member ? '' : ' 회원 로그인 후 인증할 수 있습니다.') + '</span>' +
+      (member ? '<button type="button">휴대폰 본인인증</button>' : '<a class="s-authlogin" href="' + P + '/member/login.html?returnUrl=' + encodeURIComponent(location.pathname + location.search) + '">로그인</a>');
     pay.parentNode.insertBefore(box, pay);
-    if (ok) return;
     var label = pay.innerHTML; pay.dataset.sianLock = '1'; pay.classList.add('s-locked'); pay.innerHTML = '본인인증 후 결제할 수 있습니다';
     pay.addEventListener('click', function (e) { if (pay.dataset.sianLock) { e.preventDefault(); e.stopImmediatePropagation(); box.scrollIntoView({ block: 'center' }); } }, true);
+    if (!member) return;
     box.querySelector('button').onclick = function () {
-      if (!conf.url) { alert('본인인증 서비스 연결 준비중입니다.\n(카페24 휴대폰 본인인증 서비스 가입 후 이 단추로 인증합니다)'); return; }
-      var w = window.open(conf.url, 'sian_auth', 'width=480,height=720');
+      var start = Date.now();
+      try { localStorage.removeItem('sian_auth_done'); localStorage.removeItem('sian_auth_fail'); } catch (e) { }
+      var w = window.open(P + '/member/modify.html#sian-auth', 'sian_auth', 'width=520,height=760');
+      if (!w) { alert('팝업이 막혀 있습니다. 이 사이트의 팝업을 허용해 주세요.'); return; }
+      box.querySelector('span').textContent = '열린 창에서 휴대폰 본인인증을 마쳐 주세요. 끝나면 자동으로 결제가 열립니다.';
       var t = setInterval(function () {
-        var done = false; try { done = sessionStorage.getItem('sian_auth_ok') === '1'; } catch (e) { }
-        if (done || (w && w.closed)) { clearInterval(t); if (done) { delete pay.dataset.sianLock; pay.classList.remove('s-locked'); pay.innerHTML = label; box.className = 's-auth ok'; box.innerHTML = '<b>✓ 본인인증 완료</b><span>결제를 진행할 수 있습니다.</span>'; } }
-      }, 800);
+        var done = 0, fail = '';
+        try { done = +(localStorage.getItem('sian_auth_done') || 0); fail = localStorage.getItem('sian_auth_fail') || ''; } catch (e) { }
+        if (fail) { clearInterval(t); box.querySelector('span').textContent = fail; return; }
+        if (done && done >= start) {
+          clearInterval(t);
+          var when = new Date(done), pad = function (n) { return String(n).padStart(2, '0'); };
+          var stamp = when.getFullYear() + '-' + pad(when.getMonth() + 1) + '-' + pad(when.getDate()) + ' ' + pad(when.getHours()) + ':' + pad(when.getMinutes());
+          delete pay.dataset.sianLock; pay.classList.remove('s-locked'); pay.innerHTML = label;
+          box.className = 's-auth ok'; box.innerHTML = '<b>✓ 본인인증 완료</b><span>' + stamp + ' 휴대폰 본인인증. 이 기록은 주문과 함께 저장됩니다.</span>';
+          var sel = document.getElementById('omessage_select'), ta = document.getElementById('omessage');
+          if (ta) {
+            if (sel && sel.value !== 'oMessage-input') { sel.value = 'oMessage-input'; sel.dispatchEvent(new Event('change', { bubbles: true })); }
+            var rest = ta.value.split('\n').filter(function (l) { return l.indexOf('[본인인증]') !== 0; }).join('\n');
+            ta.value = '[본인인증] 휴대폰 본인인증 완료 ' + stamp + ' (유해화학물질 ' + hz + '개 주문)' + (rest ? '\n' + rest : '');
+            ta.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+      }, 700);
     };
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();

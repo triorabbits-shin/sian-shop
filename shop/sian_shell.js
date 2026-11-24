@@ -43,6 +43,22 @@
     (hd ? hd.parentNode : document.body).insertBefore(h, hd ? hd : document.body.firstChild);
     document.documentElement.classList.add('sian-on');
   }
+  /* 본인인증 도우미 (2026-11-25): 주문서가 회원정보수정 화면을 #sian-auth 로 작은 창에 열면 카페24 '휴대폰인증'을 눌러 주고,
+     인증여부(#MauthText)가 '인증'으로 바뀌면 localStorage 'sian_auth_done' = 시각 을 남기고 창을 닫음. 카페24 단추가 비었으면(서비스 미가입) 실패 문구를 남김 */
+  if (location.hash === '#sian-auth' && /\/member\/modify\.html/.test(location.pathname)) {
+    var tryAuth = function () {
+      var btn = [].slice.call(document.querySelectorAll('#mobileWrap a, .certifForm a')).filter(function (a) { return /휴대폰/.test(a.textContent); })[0];
+      if (!btn) return setTimeout(tryAuth, 300);
+      if (!(btn.getAttribute('onclick') || '').trim()) { try { localStorage.setItem('sian_auth_fail', '카페24 휴대폰 본인인증 서비스가 아직 연결되지 않았습니다(관리자에서 본인인증 서비스 가입 필요).'); } catch (e) { } return; }
+      var before = ((document.getElementById('MauthText') || {}).textContent || '').trim();
+      btn.click();
+      var mo = setInterval(function () {
+        var now = ((document.getElementById('MauthText') || {}).textContent || '').trim();
+        if (now && now !== before && !/미인증/.test(now)) { clearInterval(mo); try { localStorage.setItem('sian_auth_done', String(Date.now())); } catch (e) { } setTimeout(function () { window.close(); }, 600); }
+      }, 700);
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tryAuth); else tryAuth();
+  }
   var cssOk = false, domOk = document.readyState !== 'loading', done = false;
   function go() { if (!done && cssOk && domOk) { done = true; head(); } }   // CSS가 들어온 뒤 머리글을 넣음(꾸밈 없는 머리글이 잠깐 보이지 않게)
   css.onload = function () { cssOk = true; go(); }; css.onerror = function () { cssOk = true; go(); };
