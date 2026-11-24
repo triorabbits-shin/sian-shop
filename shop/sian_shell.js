@@ -43,5 +43,9 @@
     (hd ? hd.parentNode : document.body).insertBefore(h, hd ? hd : document.body.firstChild);
     document.documentElement.classList.add('sian-on');
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', head); else head();
+  var cssOk = false, domOk = document.readyState !== 'loading', done = false;
+  function go() { if (!done && cssOk && domOk) { done = true; head(); } }   // CSS가 들어온 뒤 머리글을 넣음(꾸밈 없는 머리글이 잠깐 보이지 않게)
+  css.onload = function () { cssOk = true; go(); }; css.onerror = function () { cssOk = true; go(); };
+  setTimeout(function () { cssOk = true; go(); }, 2500);
+  if (!domOk) document.addEventListener('DOMContentLoaded', function () { domOk = true; go(); }); else go();
 })();
