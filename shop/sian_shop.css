@@ -214,6 +214,7 @@
 .sian-order #btn_payment{background:var(--s-navy)!important;border-color:var(--s-navy)!important;border-radius:12px!important;font-weight:800!important}
 .sian-order #mCafe24Order{padding-top:0!important;background:transparent!important}
 .sian-order .billingNshipping{margin-top:0!important}
+.sian-order #contents>.titleArea,.sian-order #contents>.ec-base-step{display:none!important}
 
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}

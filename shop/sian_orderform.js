@@ -4,7 +4,16 @@
 (function () {
   if (window.SIAN_ORDER) return; window.SIAN_ORDER = 1;
   function run() {
-    var S = window.SIAN, f = document.getElementById('frm_order_act'); if (!S || !f) return setTimeout(run, 80);
+    var S = window.SIAN; if (!S) return setTimeout(run, 80);
+    if (/order_result/.test(location.pathname)) {   // 주문 완료: 단계 03 표시 (2026-11-24, 실제 주문 전이라 화면 확인 못 함)
+      var c0 = document.getElementById('contents') || document.body;
+      document.documentElement.classList.add('sian-order');
+      var h0 = document.createElement('div'); h0.id = 'sian-cart-head';
+      h0.innerHTML = '<div class="s-ct"><h1>주문 완료</h1><ol class="s-steps2"><li><b>01</b>장바구니</li><li><b>02</b>주문서 작성</li><li class="on"><b>03</b>주문 완료</li></ol></div>' +
+        '<div class="s-cnote"><b>주문이 접수되었습니다</b>유해화학물질이 포함된 주문은 구매자격(증빙·사용 용도) 확인 후 발송합니다. MSDS는 상품 상세에서 내려받을 수 있습니다.</div>';
+      c0.insertBefore(h0, c0.firstChild); return;
+    }
+    var f = document.getElementById('frm_order_act'); if (!f) return setTimeout(run, 80);
     var esc = S.esc;
     document.documentElement.classList.add('sian-order');
     var head = document.createElement('div'); head.id = 'sian-cart-head';
