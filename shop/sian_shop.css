@@ -215,6 +215,27 @@
 .sian-order #mCafe24Order{padding-top:0!important;background:transparent!important}
 .sian-order .billingNshipping{margin-top:0!important}
 .sian-order #contents>.titleArea,.sian-order #contents>.ec-base-step{display:none!important}
+/* 연구비·법인카드, 본인인증 (2026-11-25) */
+.s-cinst{display:flex;justify-content:space-between;align-items:center;gap:16px;border:1px solid #cfdcf2;background:#f3f7ff;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#3a4656}
+.s-cinst b{display:block;color:var(--s-navy);margin-bottom:2px}
+.s-cib{display:flex;gap:8px;flex:none}
+.s-cib button{border:1px solid var(--s-navy);background:#fff;color:var(--s-navy);border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.s-binfo{border:1px solid var(--s-line);border-radius:14px;background:#fff;margin-bottom:14px;padding:16px 20px;font:14px "Noto Sans KR",sans-serif}
+.s-binfo h2{font-size:18px;color:var(--s-navy);margin:0 0 10px;font-weight:800}
+.s-binfo h2 small{font-size:12px;color:var(--s-sub);font-weight:400;margin-left:6px}
+.s-bi-r{display:flex;gap:12px;padding:7px 0;border-top:1px solid #f0f2f5;align-items:center}
+.s-bi-r>span{width:110px;flex:none;color:#4a5566;font-size:13px}
+.s-bi-r>div{display:flex;flex-wrap:wrap;gap:6px 14px;flex:1}
+.s-bi-r input[type=text],.s-bi-r input:not([type]){width:100%;max-width:420px;border:1px solid #cfd6e0;border-radius:8px;padding:7px 10px}
+.s-bi-n{margin:10px 0 0;font-size:12px;color:var(--s-sub)}
+.s-auth{border:2px solid var(--s-red);background:#fff5f5;border-radius:12px;padding:12px 16px;margin:10px 0;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font:13px "Noto Sans KR",sans-serif}
+.s-auth b{color:var(--s-red);font-size:15px}
+.s-auth span{color:#4a5566;flex:1}
+.s-auth button{background:var(--s-red);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:800;cursor:pointer}
+.s-auth.ok{border-color:var(--s-green);background:#effaf3}
+.s-auth.ok b{color:var(--s-green)}
+#btn_payment.s-locked{background:#c8ced8!important;border-color:#c8ced8!important;cursor:not-allowed}
+@media (max-width:900px){.s-cinst{flex-direction:column;align-items:flex-start}.s-bi-r{flex-direction:column;align-items:flex-start}}
 
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
