@@ -209,7 +209,7 @@ function draw() {
     const [ms, sub, nm, gr] = await Promise.all([
       getJSON(`msds/${String(shard(CODE, MANIFEST.shards.msds)).padStart(3, '0')}.json`),
       D.cas ? getJSON(`substance/${shard(D.cas, MANIFEST.shards.substance)}.json`) : Promise.resolve({}),
-      getJSON(`names/${pre}.json`), getJSON('grades.json').catch(() => null)]);
+      getJSON(`names_sh/${pre}_${String(shard(CODE, n)).padStart(2, '0')}.json`), getJSON('grades.json').catch(() => null)]);
     M = ms[CODE] || null; SUB = sub[D.cas] || null; NAMES[pre] = nm; if (gr) GRADES = gr;
     draw();
   } catch (e) { ROOT.textContent = '상세 정보를 불러오지 못했습니다.'; console.error('sian', e); }
