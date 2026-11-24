@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 190"><title>액체 용기</title>
+<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#7a3d0a"/><stop offset=".45" stop-color="#b8661c"/><stop offset="1" stop-color="#6a3206"/></linearGradient></defs>
+<rect x="58" y="6" width="34" height="22" rx="3" fill="#20262e"/>
+<rect x="62" y="28" width="26" height="16" fill="#8a4a12"/>
+<path d="M62 44 C62 58 30 62 30 84 L30 172 Q30 184 42 184 L108 184 Q120 184 120 172 L120 84 C120 62 88 58 88 44 Z" fill="url(#g)"/>
+<rect x="38" y="104" width="74" height="54" rx="3" fill="#fff"/>
+<rect x="44" y="112" width="44" height="5" fill="#0f2747"/><rect x="44" y="122" width="60" height="3" fill="#9aa5b4"/><rect x="44" y="129" width="52" height="3" fill="#9aa5b4"/>
+<rect x="44" y="140" width="24" height="10" rx="2" fill="#1d5fd1"/>
+<path d="M40 88 Q46 70 60 66" stroke="#f3c48e" stroke-width="4" fill="none" opacity=".5"/>
+</svg>
