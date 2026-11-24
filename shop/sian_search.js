@@ -46,7 +46,8 @@
             list.slice((PAGE[key] - 1) * size, PAGE[key] * size).map(row).join('') + '</tbody></table></div>' : '<div class="s-empty">조건에 맞는 상품이 없습니다.</div>') + '</div>';
       }
       function draw() {
-        var h = '<div class="s-rh">「<b>' + esc(Q || '전체 상품') + '</b>」 통합검색 결과 <b>' + hits.length.toLocaleString() + '</b>건 · 국산 ' + hits.filter(function (x) { return x.own; }).length.toLocaleString() + ' · 수입 ' + hits.filter(function (x) { return !x.own; }).length.toLocaleString() + ' · 가격 VAT 포함</div>';
+        var isList = /list\.html/.test(location.pathname), label = isList ? document.title.split(' - ')[0] : (Q || '전체 상품');
+        var h = '<div class="s-rh">「<b>' + esc(label) + '</b>」 ' + (isList ? '상품' : '통합검색 결과') + ' <b>' + hits.length.toLocaleString() + '</b>건 · 국산 ' + hits.filter(function (x) { return x.own; }).length.toLocaleString() + ' · 수입 ' + hits.filter(function (x) { return !x.own; }).length.toLocaleString() + ' · 가격 VAT 포함</div>';
         h += '<div class="s-flt"><div class="s-ft">☷ 시약 필터 <small>검색 결과 안에서 고릅니다 · 같은 줄은 또는, 다른 줄은 그리고</small></div>';
         G.forEach(function (g) {
           var cnt = {}; filt(g[0]).forEach(function (it) { g[2](it).forEach(function (v) { if (v) cnt[v] = (cnt[v] || 0) + 1; }); });
