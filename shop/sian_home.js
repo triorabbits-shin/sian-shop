@@ -27,6 +27,18 @@
         '<div class="s-desk"><div class="s-dk">MAKER DESK</div><h3>많이 찾는 메이커의<br>시약을 바로 둘러보세요</h3><div class="s-grid">' + desk + '</div>' +
         '<div class="s-btns"><a class="s-btn w" href="#s-makers">전체 메이커</a><a class="s-btn o" href="' + P + '/board/free/list.html?board_no=6">견적 문의</a></div></div></div></section>' +
         '<section class="s-stats"><div class="s-in">' + H.stats.map(function (s) { return '<div class="s-st"><small>' + esc(s[0]) + '</small><b>' + esc(s[1]) + '</b></div>'; }).join('') + '</div></section>' +
+        (function () {
+          var spots = { '한국': [127, 37], '일본': [139, 36], '미국': [-98, 39], '유럽': [10, 50], '기타': [100, 15] };
+          var tot = {}; H.makers.forEach(function (m) { tot[m.country] = (tot[m.country] || 0) + m.n; });
+          var max = Math.max.apply(null, Object.keys(tot).map(function (k) { return tot[k]; }));
+          var dots = Object.keys(spots).map(function (r) {
+            var x = (spots[r][0] + 180) / 360 * 100, y = (90 - spots[r][1]) / 180 * 100, sz = 14 + 30 * Math.sqrt((tot[r] || 0) / max);
+            return '<button class="s-dot" data-r="' + r + '" style="left:' + x + '%;top:' + y + '%;width:' + sz + 'px;height:' + sz + 'px"><span>' + r + '<b>' + (tot[r] || 0).toLocaleString() + '</b></span></button>';
+          }).join('');
+          return '<section class="s-atlas"><div class="s-in"><div class="s-atl"><span class="s-kicker" style="color:#9cc2ff;border-color:#9cc2ff">MAKER ATLAS</span>' +
+            '<h2>지역마다 어떤 메이커가 있는지<br>지도에서 골라 보세요</h2><p>점의 크기는 등록된 시약 수입니다. 점을 누르면 그 지역 메이커가 나옵니다.</p><div id="s-atlas-list" class="s-atll"></div></div>' +
+            '<div class="s-map">' + dots + '</div></div></section>';
+        })() +
         '<section class="s-sec" id="s-makers"><div class="s-in"><span class="s-kicker">MAKERS BY REGION</span><h2>국가별 메이커로 시약을 찾아보세요</h2>' +
         '<p class="s-sub">취급하는 메이커를 국가별로 묶었습니다. 메이커를 누르면 해당 메이커 상품을 검색합니다.</p>' +
         '<div class="s-tabs">' + regions.map(function (r, i) { return '<button data-r="' + r + '"' + (i ? '' : ' class="on"') + '>' + r + '<b>' + cnt[r] + '</b></button>'; }).join('') + '</div><div class="s-mks" id="s-mks"></div></div></section>' +
@@ -47,6 +59,16 @@
       }
       box.querySelectorAll('.s-tabs button').forEach(function (b) { b.onclick = function () { box.querySelectorAll('.s-tabs button').forEach(function (x) { x.classList.toggle('on', x === b); }); showRegion(b.dataset.r); }; });
       showRegion('한국');
+      function atlas(r) {
+        box.querySelectorAll('.s-dot').forEach(function (d) { d.classList.toggle('on', d.dataset.r === r); });
+        var ms = H.makers.filter(function (m) { return m.country === r; }).slice(0, 8);
+        document.getElementById('s-atlas-list').innerHTML = '<b>' + r + '</b>' + ms.map(function (m) { return '<a href="' + S.search(m.name) + '">' + esc(m.name) + ' <small>' + m.n.toLocaleString() + '</small></a>'; }).join('') +
+          '<a class="s-all" href="#s-makers">' + r + ' 메이커 전체 보기 →</a>';
+        var all = document.querySelector('#s-atlas-list .s-all');
+        all.onclick = function () { var t = box.querySelector('.s-tabs button[data-r="' + r + '"]'); if (t) t.click(); };
+      }
+      box.querySelectorAll('.s-dot').forEach(function (d) { d.onclick = function () { atlas(d.dataset.r); }; });
+      atlas('한국');
     }).catch(function (e) { console.error('sian home', e); document.documentElement.classList.remove('sian-home'); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();

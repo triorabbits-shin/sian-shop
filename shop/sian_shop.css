@@ -142,6 +142,23 @@
 #sian-home .s-cart.q{background:#fff;color:var(--s-navy);border:1px solid var(--s-navy)}
 #sian-home .s-cart{background:var(--s-navy);color:#fff;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;white-space:nowrap}
 .s-cart.off{background:#eef0f3;color:#9aa4b2;border-radius:6px;padding:5px 12px;font-size:12px}
+
+.s-atlas{background:radial-gradient(circle at 70% 40%,#13305a,#030914 70%);color:#fff;padding:60px 0}
+.s-atlas .s-in{display:grid;grid-template-columns:340px minmax(0,1fr);gap:30px;align-items:center}
+.s-atlas h2{font-size:28px;margin:10px 0;line-height:1.35;color:#fff}
+.s-atlas p{opacity:.75;margin:0 0 16px;font-size:13px}
+.s-atll{display:flex;flex-direction:column;gap:6px}
+.s-atll>b{font-size:18px;color:#ffd24d;margin-bottom:4px}
+#sian-home .s-atll a{border:1px solid #ffffff26;background:#ffffff0d;border-radius:10px;padding:8px 12px;font-size:14px;display:flex;justify-content:space-between}
+.s-atll a small{opacity:.6}
+#sian-home .s-atll a.s-all{border-style:dashed;color:#9cc2ff}
+.s-map{position:relative;aspect-ratio:2/1;border-radius:18px;border:1px solid #ffffff1f;background-image:linear-gradient(#ffffff0d 1px,transparent 1px),linear-gradient(90deg,#ffffff0d 1px,transparent 1px);background-size:8.333% 16.666%;overflow:hidden}
+.s-dot{position:absolute;transform:translate(-50%,-50%);border-radius:50%;border:0;background:radial-gradient(circle,#ffd24d,#ff9f1c 60%,#ff9f1c00 72%);cursor:pointer;box-shadow:0 0 18px #ffb84d88;animation:sPulse 2.4s infinite}
+.s-dot.on{background:radial-gradient(circle,#fff,#7fb2ff 60%,#7fb2ff00 72%);box-shadow:0 0 24px #7fb2ffaa}
+.s-dot span{position:absolute;left:50%;top:100%;transform:translate(-50%,6px);white-space:nowrap;font-size:12px;color:#dce8ff;font-weight:700}
+.s-dot span b{margin-left:4px;color:#ffd24d;font-weight:800}
+@keyframes sPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
+@media (max-width:900px){.s-atlas .s-in{grid-template-columns:1fr}}
 @media (max-width:900px){
  #sian-head .s-main .s-in{grid-template-columns:1fr;height:auto;padding:12px 16px;gap:10px}
  #sian-head .s-icons{display:none}
