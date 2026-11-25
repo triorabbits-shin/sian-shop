@@ -22,6 +22,15 @@
       });
     }, Promise.resolve(0)).then(function (n) { window.SIAN.toast(n + '개 상품을 장바구니에 담았습니다', P + '/order/basket.html'); return n; });
   };
+  /* 사업자등록증(고유번호증) 제출 — 하나의 공통 과정(2026-11-25 사용자 결정): 메일 첨부로 받음(게시판 안 씀).
+     주문서(나중에 제출)·주문 완료·주문내역·안내 메일이 모두 이 상자를 씀. 받은 메일은 관리자 PC 프로그램이 관리자메뉴\사업자등록증\ 에 저장 */
+  window.SIAN.MAIL = 'triorabbits@naver.com';
+  window.SIAN.bizdoc = function (order, org) {
+    var M = window.SIAN.MAIL, subj = '[사업자등록증] ' + (order || '주문번호') + (org ? ' ' + org : '');
+    var body = ['주문번호: ' + (order || ''), '학교/기관명: ' + (org || ''), '', '사업자등록증(고유번호증) PDF 파일을 이 메일에 첨부해 보내 주세요.'].join(String.fromCharCode(10));
+    return '<div class="s-bizdoc"><div><b>사업자등록증(고유번호증) 제출</b><span>PDF 파일을 메일로 보내 주세요. 받는 주소 <b>' + M + '</b> · 제목 「' + esc(subj) + '」</span></div>' +
+      '<a href="mailto:' + M + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body) + '">메일로 제출하기</a></div>';
+  };
   window.SIAN.toast = function (msg, link) {
     var t = document.createElement('div'); t.className = 's-toast';
     t.innerHTML = '<span>' + esc(msg) + '</span>' + (link ? '<a href="' + link + '">장바구니 보기</a>' : '');
@@ -32,7 +41,7 @@
     var h = document.createElement('div'); h.id = 'sian-head';
     h.innerHTML =
       '<div class="s-top"><div class="s-in"><span><b>국내 3사 시약</b> · MSDS 원문 · 유해화학물질 판정까지 한 번에</span>' +
-      '<span class="s-links"><a href="' + P + '/board/free/list.html?board_no=1">공지</a><a href="' + P + '/myshop/order/list.html">주문조회</a><a href="' + P + '/member/login.html">로그인</a></span></div></div>' +
+      '<span class="s-links"><a href="' + P + '/board/free/list.html?board_no=1">공지</a><a href="' + P + '/myshop/order/list.html">주문조회</a><a href="' + P + '/member/login.html">로그인</a><a class="s-adm" href="http://127.0.0.1:8025/" title="관리자 PC에서만 열립니다">관리자메뉴</a></span></div></div>' +
       '<div class="s-main"><div class="s-in"><a class="s-logo" href="' + P + '/"><i>JS</i><span>지인과학<small>REAGENT STORE</small></span></a>' +
       '<form class="s-search" action="' + P + '/product/search.html"><input name="keyword" value="' + esc(q) + '" placeholder="CAS No. · 시약명 · 동의어 · 상품코드 통합검색" autocomplete="off"><button>검색</button></form>' +
       '<div class="s-icons"><a href="' + P + '/myshop/index.html">마이페이지</a><a href="' + P + '/order/basket.html">장바구니</a><a class="s-strong" href="' + P + '/member/agreement.html">회원가입</a></div></div></div>' +

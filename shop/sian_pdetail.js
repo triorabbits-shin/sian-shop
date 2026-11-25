@@ -23,10 +23,10 @@
         // 구매 조건 안내 (2026-11-25, 화학물질관리법 제28조의2·제29조의2, 청소년 보호법 제28조)
         var cond = [];
         if (BAN) cond.push('<div class="s-cond hz"><b>판매하지 않는 물질</b>금지물질로 판정되어 판매하지 않습니다(화학물질관리법 제18조제1항).</div>');
-        if (me.hz === 'Y') cond.push('<div class="s-cond hz"><b>유해화학물질</b>주문할 때마다 휴대폰 본인인증(실명·연령 확인)을 합니다. 결제 전이나 결제 후에 인증할 수 있고, 인증이 끝나야 출고됩니다(화학물질관리법 제28조의2).</div>');
+        if (me.hz === 'Y') cond.push('<div class="s-cond hz"><b>유해화학물질</b>주문할 때마다 휴대폰 본인인증(실명·연령 확인)을 합니다. 주문서에서 지금 인증하거나 나중에 사업자등록증을 낼 수 있고, 확인이 끝나야 출고됩니다(화학물질관리법 제28조의2).</div>');
         if (HAL) cond.push('<div class="s-cond hal"><b>19세 미만 구매 불가</b>환각물질(청소년유해약물)이라 19세 미만에게는 판매하지 않습니다. 주문할 때 휴대폰 본인인증으로 나이를 확인합니다(청소년 보호법 제28조).</div>');
         if (has(me, 'LIM') || me.lim) cond.push('<div class="s-cond lim"><b>' + (has(me, 'LIM') ? '용도제한' : '확인 필요') + '</b>' + esc(me.lim) + (has(me, 'LIM') ? ' 이 용도로는 취급할 수 없습니다(화학물질관리법 제29조의2제1항제4호).' : '') + '</div>');
-        if (!cond.length) cond.push('<div class="s-cond"><b>구매 조건 안내</b>시험·연구·검사 용도로만 판매합니다. 주문할 때 구매목적을 선택합니다.</div>');
+        if (!cond.length) cond.push('<div class="s-cond"><b>구매 조건 안내</b>연구·분석·검사 목적으로만 판매합니다. 주문할 때 주문 목적을 선택합니다.</div>');
         if (me.hz === 'Y' || has(me, 'LIM') || has(me, 'PER')) cond.push('<div class="s-notice"><b>판매자 고지</b>(화학물질관리법 제29조의2제1항) ① 시험용·연구용·검사용 시약은 해당 용도로만 사용 ② 취급 시 유해화학물질 취급기준 준수 ③ 이 상품은 유해화학물질등에 해당' + (has(me, 'LIM') ? ' ④ 위 용도제한 용도로 취급 금지' : '') + '</div>');
         var won = function (n) { return n ? Number(n).toLocaleString('ko-KR') + '원' : ''; };
         var sizes = fam.filter(function (x) { return x.maker === me.maker && x.grade === me.grade; });

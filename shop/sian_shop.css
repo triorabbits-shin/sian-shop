@@ -257,6 +257,37 @@
 .s-cnote>div+div{margin-top:8px}
 .s-ctag .s-tag.hal,.s-tag.hal{background:#fff4e5;color:#b45309}
 .s-ctag .s-tag.lim,.s-tag.lim{background:#f1f0ff;color:#5b3fd1}
+/* 결제 방식·후불·본인인증 선택·사업자등록증 (2026-11-25) */
+.s-pay{border:2px solid var(--s-navy);border-radius:14px;background:#fff;margin-bottom:14px;padding:16px 20px;font:14px "Noto Sans KR",sans-serif}
+.s-pay h2{font-size:18px;color:var(--s-navy);margin:0 0 10px;font-weight:800}
+.s-pay h2 em,.s-bi-r em{font-style:normal;font-size:11px;background:var(--s-red);color:#fff;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.s-bi-r em{background:none;color:var(--s-red);font-size:13px;padding:0;margin:0}
+.s-pk{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.s-pk label{border:1px solid #cfd6e0;border-radius:12px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.s-pk label b{font-size:16px;color:var(--s-navy)}
+.s-pk label small{font-size:12px;color:var(--s-sub)}
+.s-pk label input{accent-color:var(--s-navy);align-self:flex-start}
+.s-pk label.on{border-color:var(--s-navy);background:#eef4ff;box-shadow:inset 0 0 0 1px var(--s-navy)}
+.s-postlogin{background:#fff5f5;border:1px solid #f3c9c9;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:13px}
+.s-postlogin a{color:var(--s-blue);font-weight:800;margin-left:4px}
+.s-consent{display:block;margin:10px 0;font-size:12px;color:#4a5566;line-height:1.6}
+.s-consent b{color:var(--s-navy)}
+.s-pinfo{background:#f3f7ff;border:1px solid #cfdcf2;border-radius:10px;padding:10px 14px;font-size:13px;color:#3a4656}
+.s-pinfo>b{color:var(--s-navy)}
+.s-pinfo ul{margin:6px 0 0 18px;padding:0}
+.s-pinfo li{margin:3px 0}
+.s-plim{background:#f6f4ff;border:1px solid #d9d2ff;border-radius:8px;padding:8px 12px;margin:6px 0;color:#3d2f8f}
+.s-plim b{display:block;color:#5b3fd1}
+.s-aopt{width:100%;display:flex;flex-wrap:wrap;gap:8px 18px}
+.s-aopt label{cursor:pointer}
+.s-aopt small{color:var(--s-sub)}
+.s-anow{width:100%;display:flex;gap:10px;align-items:center}
+.s-anow em{font-style:normal;color:#4a5566}
+.s-bizdoc{display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid #cfdcf2;background:#f3f7ff;border-radius:12px;padding:12px 16px;margin:10px 0;font:13px "Noto Sans KR",sans-serif;color:#3a4656}
+.s-bizdoc b:first-child{display:block;color:var(--s-navy);font-size:15px}
+.s-bizdoc a{background:var(--s-navy);color:#fff!important;border-radius:8px;padding:9px 16px;font-weight:800;text-decoration:none;white-space:nowrap}
+@media (max-width:900px){.s-pk{grid-template-columns:1fr}.s-bizdoc{flex-direction:column;align-items:flex-start}}
+#sian-head .s-adm{color:#8a94a6}
 
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
