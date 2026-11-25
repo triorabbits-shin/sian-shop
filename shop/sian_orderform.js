@@ -116,7 +116,7 @@
   function payKind() {
     var pm = payArea(); if (!pm || document.getElementById('s-pay')) return;
     var S = window.SIAN, P = S.P;
-    var bankOpt = [].slice.call(document.querySelectorAll('#bankaccount option')).filter(function (o) { return o.value; });
+    var bankOpt = [].slice.call(document.querySelectorAll('#bankaccount option')).filter(function (o) { return o.value && !/선택/.test(o.text) && /\d/.test(o.text); });
     var bankTxt = bankOpt.map(function (o) { return o.text; }).join(' / ') || '주문서의 무통장입금 계좌';
     var box = document.createElement('div'); box.id = 's-pay'; box.className = 's-pay';
     box.innerHTML = '<h2>결제 방식 <em>필수</em></h2>' +
@@ -159,7 +159,7 @@
         if (bankOpt.length === 1) { var bs = document.getElementById('bankaccount'); if (bs && bs.value !== bankOpt[0].value) { bs.value = bankOpt[0].value; bs.dispatchEvent(new Event('change', { bubbles: true })); } }
         var pn = document.getElementById('pname'); if (pn && ST.post.org) pn.value = ST.post.org;
         var p = ST.post;
-        msgLine('결제', '학교/기관 후불결제(무통장, 출고 후 ' + PERIOD + '일 안 입금) · ' + [p.org, '담당 ' + p.name, p.tel, p.mail].join(' · ') + (ST.consent ? ' · 개인정보 동의 ' + stamp() : ''));
+        msgLine('결제', '학교/기관 후불결제(무통장, 출고 후 ' + PERIOD + '일 안 입금)' + [p.org, p.name && '담당 ' + p.name, p.tel, p.mail].filter(Boolean).map(function (x) { return ' · ' + x; }).join('') + (ST.consent ? ' · 개인정보 동의 ' + stamp() : ''));
         msgLine('구매정보', '');
       } else {
         payRows(true);

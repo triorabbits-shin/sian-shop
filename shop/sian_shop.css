@@ -288,6 +288,9 @@
 .s-bizdoc a{background:var(--s-navy);color:#fff!important;border-radius:8px;padding:9px 16px;font-weight:800;text-decoration:none;white-space:nowrap}
 @media (max-width:900px){.s-pk{grid-template-columns:1fr}.s-bizdoc{flex-direction:column;align-items:flex-start}}
 #sian-head .s-adm{color:#8a94a6}
+.s-pnot li b{display:inline!important;margin:0}
+#s-pay .s-pk label{display:flex!important;flex-wrap:wrap;align-items:center;gap:2px 8px}
+#s-pay .s-pk label small{flex-basis:100%;padding-left:26px}
 
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
