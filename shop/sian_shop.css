@@ -220,6 +220,7 @@
 /* 연구비·법인카드, 본인인증 (2026-11-25) */
 .s-cinst{display:flex;justify-content:space-between;align-items:center;gap:16px;border:1px solid #cfdcf2;background:#f3f7ff;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#3a4656}
 .s-cinst b{display:block;color:var(--s-navy);margin-bottom:2px}
+.s-cinst span b{display:inline;margin:0}
 .s-cib{display:flex;gap:8px;flex:none}
 .s-cib button{border:1px solid var(--s-navy);background:#fff;color:var(--s-navy);border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;white-space:nowrap}
 .s-binfo{border:1px solid var(--s-line);border-radius:14px;background:#fff;margin-bottom:14px;padding:16px 20px;font:14px "Noto Sans KR",sans-serif}
