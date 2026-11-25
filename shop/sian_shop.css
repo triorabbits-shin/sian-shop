@@ -92,6 +92,8 @@
 .s-prod .s-pr b{font-size:17px;color:var(--s-text)}
 .s-tag{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
 .s-tag.hz{background:#fff1f1;color:var(--s-red)}
+.s-tag.hal{background:#fff4e5;color:#b45309;margin-left:3px}
+.s-tag.lim{background:#f1f0ff;color:#5b3fd1;margin-left:3px}
 .s-tag.ok{background:#e9f7ef;color:var(--s-green)}
 .s-tag.no{background:#f1f3f6;color:var(--s-sub)}
 .s-doc{background:linear-gradient(120deg,#0f2747,#1d4f8f);color:#fff;padding:56px 0}
@@ -251,6 +253,10 @@
 .s-pnot ol{margin:6px 0 6px 18px;padding:0}
 .s-pnot li{margin:2px 0}
 
+.s-cnote>div+div{margin-top:8px}
+.s-ctag .s-tag.hal,.s-tag.hal{background:#fff4e5;color:#b45309}
+.s-ctag .s-tag.lim,.s-tag.lim{background:#f1f0ff;color:#5b3fd1}
+
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
 .sian-on #contents .titleArea h2,.sian-on #contents .titleArea h1{color:var(--s-navy)!important;font-weight:800!important;letter-spacing:-.02em}
@@ -339,3 +345,11 @@
 .s-ck{width:16px;height:16px;accent-color:var(--s-navy)}
 .s-multi{width:100%;margin-top:8px;height:40px;border-radius:10px;border:1px dashed var(--s-navy);background:#f3f6fb;color:var(--s-navy);font-weight:700;cursor:pointer}
 .s-hzn{margin-top:8px;font-size:12px;color:var(--s-red)}
+
+.s-cond+.s-cond{margin-top:8px}
+.s-cond.hal{background:#fff8ec;border-color:#f6d9a8}
+.s-cond.hal b{color:#b45309}
+.s-cond.lim{background:#f6f4ff;border-color:#d9d2ff}
+.s-cond.lim b{color:#5b3fd1}
+.s-notice{margin-top:8px;font-size:12px;color:#5b6575;line-height:1.6;padding:8px 12px;border-left:3px solid #cfd6e0;background:#fafbfd}
+.s-notice b{color:var(--s-navy);margin-right:4px}

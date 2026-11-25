@@ -17,23 +17,36 @@
       head.appendChild(e); document.documentElement.classList.add('sian-cart-empty'); return;
     }
     fetch(S.B + 'shop/cartinfo.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (I) {
-      var hz = 0;
+      var hz = 0, hal = 0, ban = 0, lim = 0;
       items.forEach(function (b) {
         var a = b.querySelector('a[href*="product_no="], .prdName a'), m = a && (a.getAttribute('href') || '').match(/product_no=(\d+)|\/(\d+)\/category\//);
         var no = m && (m[1] || m[2]), d = no && I[no]; if (!d) return;
-        if (d.hz === 'Y') hz++;
+        var cls = d.cls || '';
+        if (d.hz === 'Y') hz++; if (cls.indexOf('HAL') >= 0) hal++; if (cls.indexOf('BAN') >= 0) ban++; if (cls.indexOf('LIM') >= 0) lim++;
         var t = document.createElement('div'); t.className = 's-ctag';
-        t.innerHTML = (d.hz === 'Y' ? '<span class="s-tag hz">◆ 유해화학물질</span>' : '<span class="s-tag ok">◇ 일반시약</span>') +
+        t.innerHTML = (cls.indexOf('BAN') >= 0 ? '<span class="s-tag hz">판매불가</span>' : d.hz === 'Y' ? '<span class="s-tag hz">◆ 유해화학물질</span>' : '<span class="s-tag ok">◇ 일반시약</span>') +
+          (cls.indexOf('HAL') >= 0 ? '<span class="s-tag hal">19세 이상</span>' : '') + (cls.indexOf('LIM') >= 0 ? '<span class="s-tag lim" title="' + esc(d.lim || '') + '">용도제한</span>' : '') +
           '<span>' + esc(d.maker) + '</span><span>' + esc(d.pk) + '</span>' + (d.cas ? '<span>CAS ' + esc(d.cas) + '</span>' : '') +
           (d.grade ? '<span>' + esc(d.grade) + '</span>' : '') + '<span class="' + (d.stock === '재고없음' ? 's-st0' : 's-st1') + '">' + esc(d.stock || '-') + '</span>' +
           (d.murl ? '<a href="' + d.murl + '" target="_blank">MSDS</a>' : '');
         var desc = b.querySelector('.description') || b; desc.appendChild(t);
       });
       var n = document.createElement('div');
-      n.className = 's-cnote' + (hz ? ' hz' : '');
-      n.innerHTML = hz ? '<b>유해화학물질 ' + hz + '개가 담겨 있습니다</b>주문서 작성 단계에서 구매자격(성인·사업자/기관 증빙, 사용 용도)을 확인한 뒤 주문할 수 있습니다.'
-                       : '<b>일반 시약만 담겨 있습니다</b>비회원도 주문할 수 있습니다. 실험·연구·검사 용도로만 사용해 주세요.';
+      n.className = 's-cnote' + (hz || hal || ban ? ' hz' : '');
+      var L = [];
+      if (ban) L.push('<b>판매하지 않는 물질 ' + ban + '개가 있습니다</b>금지물질(화학물질관리법 제18조제1항)은 주문할 수 없습니다. 삭제한 뒤 주문해 주세요.');
+      if (hz) L.push('<b>유해화학물질 ' + hz + '개가 담겨 있습니다</b>주문할 때마다 휴대폰 본인인증(실명·연령 확인)을 합니다. 결제 전이나 결제 후에 할 수 있고, 인증이 끝나야 출고됩니다(화학물질관리법 제28조의2).');
+      if (hal) L.push('<b>19세 미만 구매 불가 상품 ' + hal + '개</b>환각물질(청소년유해약물)은 주문할 때 휴대폰 본인인증으로 나이를 확인합니다(청소년 보호법 제28조).');
+      if (lim) L.push('<b>용도제한 상품 ' + lim + '개</b>제한된 용도로는 취급할 수 없습니다. 주문서에서 내용을 확인합니다.');
+      if (!L.length) L.push('<b>일반 시약만 담겨 있습니다</b>비회원도 주문할 수 있습니다. 주문할 때 구매목적(시험·연구·검사)을 선택합니다.');
+      n.innerHTML = L.map(function (x) { return '<div>' + x + '</div>'; }).join('');
       head.appendChild(n);
+      if (ban) {   // 금지물질이 있으면 주문 단추 잠금
+        [].slice.call(document.querySelectorAll('a[onclick*="Basket.orderAll"], a[onclick*="Basket.orderSelectBasket"], a[onclick*="orderAll"], .btnSubmit, #btn_order_all')).forEach(function (b) {
+          b.addEventListener('click', function (e) { e.preventDefault(); e.stopImmediatePropagation(); S.toast('판매하지 않는 물질을 삭제한 뒤 주문해 주세요'); }, true);
+          b.style.opacity = '.45';
+        });
+      }
     }).catch(function (e) { console.error('sian basket', e); });
     // 연구비·법인카드 결제 안내 + 거래명세서(결제 전)·견적서 (2026-11-25)
     var inst = document.createElement('div'); inst.className = 's-cinst';
