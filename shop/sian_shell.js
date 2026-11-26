@@ -31,6 +31,24 @@
     return '<div class="s-bizdoc"><div><b>사업자등록증(고유번호증) 제출</b><span>PDF 파일을 메일로 보내 주세요. 받는 주소 <b>' + M + '</b> · 제목 「' + esc(subj) + '」</span></div>' +
       '<a href="mailto:' + M + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body) + '">메일로 제출하기</a></div>';
   };
+  /* 유해화학물질등 정보요약서(시행규칙 별지 제47호의2, 전자문서) 주소 */
+  window.SIAN.summary = function (pks, order) { return B + 'shop/summary.html?pk=' + encodeURIComponent(pks.join(',')) + (order ? '&order=' + encodeURIComponent(order) : ''); };
+  window.SIAN.summaryBox = function (pks, order) {
+    if (!pks.length) return '';
+    return '<div class="s-bizdoc"><div><b>유해화학물질등 정보요약서</b><span>「화학물질관리법」 제29조의2·시행규칙 제31조의2에 따른 고지 문서입니다(' + pks.length + '개 상품). 인쇄하거나 PDF로 저장할 수 있습니다.</span></div>' +
+      '<a href="' + window.SIAN.summary(pks, order) + '" target="_blank">정보요약서 보기</a></div>';
+  };
+  /* 페이지 안 상품 링크(product_no) -> cartinfo.json -> 유해화학물질등(HZ·LIM·PER) 상품코드 */
+  window.SIAN.hazPks = function (root) {
+    return fetch(B + 'shop/cartinfo.json?v=' + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }).then(function (I) {
+      var out = [];
+      [].slice.call((root || document).querySelectorAll('a[href*="product_no="], a[href*="/product/"]')).forEach(function (a) {
+        var m = (a.getAttribute('href') || '').match(/product_no=(\d+)|\/product\/[^/]*\/(\d+)\//), no = m && (m[1] || m[2]), d = no && I[no];
+        if (d && (d.hz === 'Y' || /LIM|PER/.test(d.cls || '')) && out.indexOf(d.pk) < 0) out.push(d.pk);
+      });
+      return out;
+    });
+  };
   window.SIAN.toast = function (msg, link) {
     var t = document.createElement('div'); t.className = 's-toast';
     t.innerHTML = '<span>' + esc(msg) + '</span>' + (link ? '<a href="' + link + '">장바구니 보기</a>' : '');

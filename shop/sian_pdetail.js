@@ -38,7 +38,8 @@
         var left = '<div class="s-dl"><div class="s-ban"><img src="' + img + '" alt=""><div><small>REAGENT · BRAND</small><b>' + esc(me.maker) + '</b><span>' + (me.own ? '국산시약 · 공급사 직송' : '수입시약 · 공급사 입고') + '</span></div></div>' +
           '<h1 class="s-ttl">' + esc(me.name) + '</h1><div class="s-st2">' + esc(me.orig) + '</div>' +
           '<div class="s-dbtn">' + (me.murl ? '<a href="' + me.murl + '" target="_blank">⤓ MSDS</a>' : '<span class="off">MSDS 없음</span>') +
-          '<a href="' + P + '/board/inquiry/write.html?product_no=' + me.no + '">규격·COA 문의</a></div>' +
+          '<a href="' + P + '/board/inquiry/write.html?product_no=' + me.no + '">규격·COA 문의</a>' +
+          (me.hz === 'Y' || has(me, 'LIM') || has(me, 'PER') ? '<a href="' + S.summary([me.pk]) + '" target="_blank">정보요약서</a>' : '') + '</div>' +
           '<div class="s-info">' + info.map(function (r) { return '<div><small>' + r[0] + '</small><b>' + esc(r[1]) + '</b></div>'; }).join('') + '</div>' +
           cond.join('') + '</div>';
         var qty = '<div class="s-qty"><button type="button" data-q="-1">−</button><input id="s-q" value="1" inputmode="numeric"><button type="button" data-q="1">+</button></div>';

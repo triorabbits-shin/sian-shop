@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>유해화학물질등 정보요약서</title>
+<!-- 유해화학물질등 정보요약서 (화학물질관리법 시행규칙 별지 제47호의2서식 항목, 2026-11-26).
+     법 제29조의2·시행규칙 제31조의2: 판매자는 고지 사항을 용기 표시 또는 이 요약서(전자문서 가능)로 알려야 함.
+     summary.html?pk=상품코드[,상품코드…][&order=주문번호]  데이터 = 사이트파일/data (상품·MSDS·공단 판정) -->
+<style>
+:root{--line:#9aa4b2;--navy:#0f2747;--sub:#5b6575}
+*{box-sizing:border-box}
+body{margin:0;background:#eef1f5;font:13px/1.55 "Noto Sans KR","Malgun Gothic",sans-serif;color:#111}
+.bar{position:sticky;top:0;background:var(--navy);color:#fff;padding:10px 16px;display:flex;gap:10px;align-items:center}
+.bar b{flex:1}.bar button{border:0;border-radius:8px;padding:7px 14px;font-weight:700;cursor:pointer}
+.sheet{width:210mm;max-width:100%;min-height:297mm;margin:16px auto;background:#fff;padding:14mm 14mm;box-shadow:0 4px 20px #0001}
+h1{text-align:center;font-size:22px;margin:0 0 4px;letter-spacing:.15em}
+.lead{border:1px solid var(--line);padding:8px 10px;font-size:12px;color:#333;margin:10px 0}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th,td{border:1px solid var(--line);padding:6px 8px;vertical-align:top;text-align:left}
+th{background:#f2f4f8;width:24%;font-weight:700}
+th.g{width:12%;text-align:center;vertical-align:middle}
+td small{color:var(--sub)}
+.sub{font-size:11px;color:var(--sub);margin-top:6px}
+.pg{page-break-after:always}
+@media print{body{background:#fff}.bar{display:none}.sheet{margin:0;box-shadow:none;padding:10mm}}
+@media (max-width:600px){.sheet{padding:16px}th{width:30%}}
+</style>
+</head>
+<body>
+<div class="bar"><b>유해화학물질등 정보요약서</b><button onclick="print()">인쇄 · PDF 저장</button></div>
+<div id="out"><div class="sheet">불러오는 중…</div></div>
+<script>
+const SELLER = { name: '주식회사 세마리토끼센츄리 (지인과학)', addr: '(08376) 서울 구로구 디지털로33길 55 이앤씨벤처드림타워2차 1001호', tel: '010-2135-5533', biz: '549-85-01874', mail: '2021-서울구로-2828호' };
+const DATA = 'https://triorabbits-shin.github.io/sian-shop/data/';
+const CRC = (() => { const t = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+const crc32 = s => { let c = 0xFFFFFFFF; for (const x of new TextEncoder().encode(s)) c = CRC[(c ^ x) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const br = s => esc(s).replace(/\n/g, '<br>');
+const none = s => !s || /^자료없음|^해당없음|^-$/.test(String(s).trim());
+let MAN;
+async function J(rel) { const r = await fetch(DATA + rel + '?v=' + ((MAN && MAN.files[rel]) || Date.now())); if (!r.ok) throw new Error(rel); return r.json(); }
+function pick(...xs) { return xs.filter(x => !none(x)).join('\n'); }
+
+async function one(pk) {
+  const pre = pk.split('_')[0], n = MAN.shards.product[pre];
+  const sh = String(crc32(pk) % n).padStart(2, '0');
+  const [prod, ms, nm] = await Promise.all([J(`product/${pre}_${sh}.json`), J(`msds/${String(crc32(pk) % MAN.shards.msds).padStart(3, '0')}.json`), J(`names_sh/${pre}_${sh}.json`).catch(() => ({}))]);
+  const D = prod[pk]; if (!D) return `<div class="sheet pg">상품 ${esc(pk)} 정보를 찾지 못했습니다.</div>`;
+  const M = ms[pk] || {}, N = nm[pk] || [];
+  const J0 = (D.judge || []).filter(j => j.jd_res && j.jd_res !== '미해당');
+  const cls = J0.map(j => `${j.jd_disp}: ${j.jd_kind || j.jd_cls}${j.jd_unq ? ' (지정번호 ' + j.jd_unq + ')' : ''}${j.jd_crit ? ' — ' + j.jd_crit : ''}`);
+  const lim = J0.filter(j => j.jd_disp === '용도제한').map(j => (j.jd_excp || '').replace(/<br\s*\/?>/g, ' ').replace(/\s+/g, ' ').trim());
+  const name = (N[0] || D.name_orig || pk);
+  const unq = [...new Set(J0.map(j => j.jd_unq).filter(Boolean))].join(', ');
+  const rows = [
+    ['판매자 상호(명칭)', esc(SELLER.name) + ` <small>(사업자등록번호 ${esc(SELLER.biz)} · 통신판매업 ${esc(SELLER.mail)})</small>`],
+    ['주소(사업장)', esc(SELLER.addr)], ['판매자 대표전화', esc(SELLER.tel)]];
+  const info = [
+    ['물질명', `${esc(name)}<br><small>상품코드 ${esc(pk)} · ${esc(D.maker || '')} ${esc(D.grade || '')} ${esc(D.content || '')} ${esc(D.packing || '')}</small>`],
+    ['고유번호 또는 화학물질 식별번호(CAS No.)', esc(D.cas || '-') + (unq ? `<br><small>유해화학물질 등 지정번호 ${esc(unq)}</small>` : '')],
+    ['용도', '시험용·연구용·검사용 시약 — <b>해당 용도로만 사용</b>하여야 합니다(화학물질관리법 제29조의2제1항제1호).' +
+      (lim.length ? '<br><b>용도제한</b>: ' + lim.map(esc).join('<br>') + '<br>위 용도로는 취급하지 마십시오(같은 항 제4호).' : '') +
+      (cls.length ? '<br><b>유해화학물질등 해당</b>: ' + cls.map(esc).join('<br>') + ' (같은 항 제3호)' : '')]];
+  const keep = [
+    ['취급시설', br(pick(M['취급'], M['보호구'] && ('[보호구] ' + M['보호구']))) || '국소배기장치 등 환기가 되는 곳에서 취급하십시오.'],
+    ['화학사고 예방', br(pick(M['회피물질'] && ('[피해야 할 물질·조건] ' + M['회피물질']), M['흡입'] && ('[흡입] ' + M['흡입']), M['피부'] && ('[피부] ' + M['피부']), M['눈'] && ('[눈] ' + M['눈']), M['먹었을때'] && ('[먹었을 때] ' + M['먹었을때']))) || 'MSDS 4·10번 항목을 확인하십시오.'],
+    ['보관ㆍ저장', br(pick(M['저장'], M['회피물질'] && ('[혼합 적재 금지·피해야 할 물질] ' + M['회피물질']))) || 'MSDS 7번 항목을 확인하십시오.'],
+    ['운반', '공급사 원래 용기 그대로 밀봉 포장하여 발송합니다.' + (M.un_no ? `<br>유엔번호(UN No.) ${esc(M.un_no)}` : '') + (D.ship_note ? `<br>${esc(D.ship_note)}` : '')],
+    ['기타', br(pick(M.ghs_signal && ('[신호어] ' + M.ghs_signal), M.ghs_h && ('[유해·위험 문구] ' + M.ghs_h), M['폐기방법'] && ('[폐기] ' + M['폐기방법']), M['폐기주의사항'])) + '<br><small>자세한 내용은 물질안전보건자료(MSDS)를 확인하십시오. 유해화학물질 취급 시 유해화학물질 취급기준을 준수하여야 합니다(같은 항 제2호).</small>']];
+  const tr = (rs, g) => rs.map((r, i) => `<tr>${g && i === 0 ? `<th class="g" rowspan="${rs.length}">${g}</th>` : ''}<th>${r[0]}</th><td>${r[1]}</td></tr>`).join('');
+  return `<div class="sheet pg"><h1>유해화학물질등<br>정보요약서</h1>
+  <div class="lead">이 요약서는 「화학물질관리법」 제29조의2 및 같은 법 시행규칙 제31조의2에 따라 유해화학물질 시약은 해당 용도로만 사용하고, 유해화학물질 취급 시에는 그 취급 기준을 준수해야 하며, 판매하는 화학물질이 유해화학물질등에 해당되고, 판매하는 화학물질에 용도제한 등이 있는 경우 이를 그러한 용도로 취급하지 말 것 혹은 그러한 용도로만 취급해야 한다는 것을 구매자에게 서면 또는 전자문서로 알려주는 것을 목적으로 하고 있습니다.</div>
+  <table>${tr(rows)}${tr(info, '유해화학물질등<br>정보')}${tr(keep, '취급 기준<br>준수')}</table>
+  <div class="sub">발행: ${new Date().toLocaleDateString('ko-KR')} · ${esc(SELLER.name)}${ORDER ? ' · 주문번호 ' + esc(ORDER) : ''} · 근거 자료: 공급사 MSDS, 한국환경공단 화학물질 정보</div></div>`;
+}
+const Q = new URLSearchParams(location.search), ORDER = Q.get('order') || '';
+(async () => {
+  const pks = (Q.get('pk') || '').split(',').map(s => s.trim()).filter(Boolean);
+  const out = document.getElementById('out');
+  if (!pks.length) { out.innerHTML = '<div class="sheet">상품코드가 없습니다.</div>'; return; }
+  try { MAN = await J('manifest.json'); out.innerHTML = (await Promise.all(pks.map(one))).join(''); }
+  catch (e) { out.innerHTML = '<div class="sheet">정보를 불러오지 못했습니다.</div>'; console.error(e); }
+})();
+</script>
+</body>
+</html>
