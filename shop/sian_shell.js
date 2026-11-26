@@ -68,7 +68,7 @@
     };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tryAuth); else tryAuth();
   }
-  /* 상품 문의(재고·납기·가격·규격) — 사용자 결정 2026-11-26: 문의 단추 -> 카페24 '상품 Q&A'(6번) 비밀글, 전화·메일(필수)+동의를 본문 첫 줄에 저장.
+  /* 상품 문의(재고·납기·가격·규격) — 사용자 결정 2026-11-26: 문의 단추 -> 카페24 '상품 Q&A'(6번) 비밀글, 연락받을 번호(카페24 이메일 칸 옆에 한 칸 추가)를 본문 첫 줄 `[연락받을번호]`로 저장, 메일은 카페24 이메일 칸(writer_email).
      관리자가 답변하면 관리자 PC 프로그램(admin_ask.py)이 문자·메일로 회신. it = {pk, name, packing, no}, kind = 재고납기문의|가격문의|규격·COA 문의 */
   window.SIAN.ask = function (kind, it) {
     try { sessionStorage.setItem('sian_ask', JSON.stringify({ kind: kind, pk: it.pk || '', name: it.name || '', packing: it.packing || '', t: Date.now() })); } catch (e) { }
@@ -84,20 +84,20 @@
     var kind = a.kind || '상품 문의';
     if (!sub.value) sub.value = '[' + kind + '] ' + [a.pk, a.name, a.packing].filter(Boolean).join(' ');
     if (a.pk && /^<p><br><\/p>$|^$/.test(ed.html.get())) ed.html.set('<p>상품: ' + esc([a.pk, a.name, a.packing].filter(Boolean).join(' · ')) + '</p><p>필요 수량: </p><p>희망 납기: </p><p>문의 내용: </p>');
-    var sec = document.getElementById('secure1'); if (sec) sec.click();   // 비밀글(연락처가 본문에 들어가므로)
-    var box = document.createElement('div'); box.id = 'sian-ask';
-    box.innerHTML = '<b>' + esc(kind) + ' · 답변 받을 연락처</b><span>답변이 등록되면 아래 휴대전화(문자)와 메일로 알려 드립니다. 글은 비밀글로 저장되어 작성자와 관리자만 볼 수 있습니다.</span>' +
-      '<div class="s-af"><label>휴대전화 <input id="s_atel" type="tel" placeholder="010-0000-0000"></label><label>메일 <input id="s_amail" type="email" placeholder="name@example.com"></label></div>' +
-      '<label class="s-ac"><input id="s_aagree" type="checkbox"> 문의 답변을 위해 휴대전화·메일을 수집·이용하는 데 동의합니다(답변 후 1년 보관).</label>';
-    form.parentNode.insertBefore(box, form);
+    var sec = document.getElementById('secure1'); if (sec) sec.click();   // 비밀글(연락받을 번호가 본문에 들어가므로)
+    // 연락받을 번호 칸 하나만 추가(사용자 지시 2026-11-26): 카페24 '이메일' 줄 바로 아래(이메일 줄이 숨겨진 회원이면 작성자/제목 줄 아래)
+    var rows = [].slice.call(form.querySelectorAll('tr')), th = function (r) { var h = r.querySelector('th'); return h ? h.textContent.replace(/\s/g, '') : ''; };
+    var at = rows.filter(function (r) { return th(r) === '이메일' && getComputedStyle(r).display !== 'none'; })[0] ||
+      rows.filter(function (r) { return th(r) === '작성자' && getComputedStyle(r).display !== 'none'; })[0] || sub.closest('tr');
+    var tr = document.createElement('tr'); tr.id = 'sian-ask';
+    tr.innerHTML = '<th scope="row">연락받을 번호</th><td><input id="s_atel" type="tel" class="inputTypeText" placeholder="010-0000-0000" style="max-width:220px;width:100%"> <span class="s-ah">답변 등록을 문자로 알려 드립니다</span></td>';
+    at.parentNode.insertBefore(tr, at.nextSibling);
     document.addEventListener('click', function (e) {
       var t = e.target.closest && e.target.closest('a[onclick*="form_submit"],button[onclick*="form_submit"]'); if (!t) return;
-      var tel = document.getElementById('s_atel').value.trim(), mail = document.getElementById('s_amail').value.trim(), ok = document.getElementById('s_aagree').checked;
-      var why = !/^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(tel) ? '휴대전화를 정확히 입력해 주세요' : !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail) ? '메일 주소를 정확히 입력해 주세요' : !ok ? '연락처 수집·이용에 동의해 주세요' : '';
-      if (why) { e.preventDefault(); e.stopImmediatePropagation(); window.SIAN.toast(why); box.scrollIntoView({ block: 'center' }); return; }
-      var d = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ');
-      var line = '<p>[문의연락처] 전화 ' + esc(tel) + ' · 메일 ' + esc(mail) + ' · 동의 ' + d + ' (KST)</p>';
-      ed.html.set(line + ed.html.get().replace(/<p>\[문의연락처\][\s\S]*?<\/p>/, ''));
+      var tel = document.getElementById('s_atel').value.trim();
+      if (tel && !/^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(tel)) { e.preventDefault(); e.stopImmediatePropagation(); window.SIAN.toast('연락받을 번호를 정확히 입력해 주세요'); tr.scrollIntoView({ block: 'center' }); return; }
+      var body = ed.html.get().replace(/<p>\[(문의연락처|연락받을번호)\][\s\S]*?<\/p>/, '');
+      ed.html.set((tel ? '<p>[연락받을번호] ' + esc(tel) + '</p>' : '') + body);
       if (sec && !sec.checked) sec.click();
       try { sessionStorage.removeItem('sian_ask'); } catch (x) { }
     }, true);
