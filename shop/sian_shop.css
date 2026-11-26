@@ -300,6 +300,11 @@
 .s-bizlink{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;color:var(--s-blue)!important;border:1px solid #cfdcf2;border-radius:6px;padding:2px 8px;background:#f3f7ff}
 #sian-myorder{max-width:1240px;margin:16px auto;padding:0 20px;font:13px "Noto Sans KR",sans-serif}
 
+#s-pay .s-pk label small{box-sizing:border-box;max-width:100%;overflow-wrap:anywhere}
+
+.s-cnote b{display:inline}
+.s-cnote>b:first-child,.s-cnote>div>b:first-child{display:block}
+
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
 .sian-on #contents .titleArea h2,.sian-on #contents .titleArea h1{color:var(--s-navy)!important;font-weight:800!important;letter-spacing:-.02em}
