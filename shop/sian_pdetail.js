@@ -81,18 +81,19 @@
           if (!picks.length) { S.toast('담을 포장을 체크해 주세요'); return; }
           mb.disabled = true; S.addCart(picks).then(function () { mb.disabled = false; });
         };
-        box.querySelectorAll('[data-ask]').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); S.ask(a.dataset.ask, me); }; });
+        var AK = { pk: me.pk, name: me.name, packing: me.packing, no: (location.search.match(/product_no=(\d+)/) || location.pathname.match(/\/(\d+)\/category\//) || [])[1] || me.no };   // 문의 글에 이 상품 연결
+        box.querySelectorAll('[data-ask]').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); S.ask(a.dataset.ask, AK); }; });
         var off = !me.price || !me.ok || me.stock === '재고없음';
         box.querySelectorAll('.s-bb button').forEach(function (b, i) {
           if (!me.price && !BAN) {   // 가격문의: 첫 단추는 문의 게시판으로, 둘째는 숨김
             if (i) { b.style.display = 'none'; return; }
             b.textContent = '가격·납기 문의'; b.style.gridColumn = '1 / 3';
-            b.onclick = function () { S.ask('가격문의', me); }; return;
+            b.onclick = function () { S.ask('가격문의', AK); }; return;
           }
           if (ASK && !BAN) {   // 재고납기문의: 장바구니·바로구매 대신 문의 단추 하나
             if (i) { b.style.display = 'none'; return; }
             b.textContent = '재고납기문의'; b.className = 'b'; b.style.gridColumn = '1 / 3';
-            b.onclick = function () { S.ask('재고납기문의', me); }; return;
+            b.onclick = function () { S.ask('재고납기문의', AK); }; return;
           }
           if (BAN) { b.disabled = true; b.textContent = i ? '' : '판매하지 않는 물질'; if (i) b.style.display = 'none'; else b.style.gridColumn = '1 / 3'; return; }
           if (off) { b.disabled = true; b.textContent = '재고없음'; return; }
