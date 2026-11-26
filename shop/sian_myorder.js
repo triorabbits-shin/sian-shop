@@ -19,6 +19,14 @@
         tx.innerHTML = '<div><b>세금계산서 발행 신청</b><span>무통장 등 현금 결제 주문은 아래 단추로 신청하면, 입금 확인·배송완료 후 전자 세금계산서가 발행됩니다(카드 결제는 카드 전표가 증빙). 사업자등록번호·상호·담당 메일을 적어 주세요.</span></div><a href="#none">세금계산서 신청</a>';
         tx.querySelector('a').onclick = function (e) { e.preventDefault(); taxBtn.click(); };
         box.appendChild(tx);
+        // 이미 신청한 주문이면 '신청 완료'로 표시 (카페24가 두 번째 신청을 "전자세금계산서 신청이 이미 완료되었습니다"로 막음, 2026-11-26 확인)
+        var m = (taxBtn.getAttribute('onclick') || '').match(/'([^']*issue\/tax\.html[^']*)'/);
+        if (m) fetch(m[1], { credentials: 'same-origin' }).then(function (r) { return r.text(); }).then(function (h) {
+          if (/신청이 이미 완료/.test(h)) {
+            var a = tx.querySelector('a'); a.outerHTML = '<span class="s-done">✓ 신청 완료</span>';
+            tx.querySelector('span').innerHTML = '세금계산서 신청이 접수되었습니다. 입금 확인·배송완료 후 약 1시간 뒤 전자 세금계산서가 발행되며, 발행되면 이 화면의 <b>세금계산서 인쇄</b>로 볼 수 있습니다.';
+          }
+        }).catch(function () { });
       }
       return;
     }

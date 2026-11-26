@@ -305,6 +305,8 @@
 .s-cnote b{display:inline}
 .s-cnote>b:first-child,.s-cnote>div>b:first-child{display:block}
 
+.s-bizdoc .s-done{background:#effaf3;color:#16803c;border:1px solid #b6e3c5;border-radius:8px;padding:9px 16px;font-weight:800;white-space:nowrap}
+
 /* 공통 페이지(로그인·회원가입·마이페이지·주문조회·게시판 등): 카페24 기본 요소 모양을 우리 색으로 (2026-11-24) */
 .sian-on #contents{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif}
 .sian-on #contents .titleArea h2,.sian-on #contents .titleArea h1{color:var(--s-navy)!important;font-weight:800!important;letter-spacing:-.02em}
