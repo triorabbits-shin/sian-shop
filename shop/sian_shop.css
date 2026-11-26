@@ -404,4 +404,8 @@
 .s-notice{margin-top:8px;font-size:12px;color:#5b6575;line-height:1.6;padding:8px 12px;border-left:3px solid #cfd6e0;background:#fafbfd}
 .s-notice b{color:var(--s-navy);margin-right:4px}
 
-#sian-pd .s-ask{margin:10px 0 8px;padding:8px 10px;border:1px solid #f0c36d;background:#fff8e6;color:#7a5200;border-radius:6px;font-size:13px;line-height:1.5}
+#sian-ask{max-width:900px;margin:0 auto 14px;padding:12px 14px;border:1px solid #f0c36d;background:#fff8e6;border-radius:8px;font-size:13px;line-height:1.55;box-sizing:border-box}
+#sian-ask>b{display:block;margin-bottom:4px;color:#7a5200}#sian-ask>span{display:block;color:#5c4a1f}
+#sian-ask .s-af{display:flex;flex-wrap:wrap;gap:8px 14px;margin:8px 0}#sian-ask .s-af label{display:flex;align-items:center;gap:6px;flex:1 1 220px}
+#sian-ask .s-af input{flex:1;min-width:0;height:32px;padding:0 8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
+#sian-ask .s-ac{display:flex;gap:6px;align-items:flex-start}

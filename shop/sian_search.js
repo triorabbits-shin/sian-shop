@@ -22,7 +22,7 @@
       var SEL = {}, PAGE = { own: 1, imp: 1 };
       var G = [['maker', '브랜드', function (it) { return [it.maker]; }], ['grade', '등급', function (it) { return it.grade ? it.grade.split(' | ') : []; }],
         ['packing', '포장', function (it) { return [it.packing]; }], ['state', '성상', function (it) { return [it.state || '미확인']; }],
-        ['flag', '재고·유해', function (it) { var a = []; if (it.ok && it.price && it.stock !== '재고없음') a.push('재고 있음'); a.push(it.hz === 'Y' ? '유해화학물질' : '일반시약'); if (it.cls.indexOf('LIM') >= 0) a.push('용도제한'); if (it.hal) a.push('19세 이상(환각물질)'); if (it.msds) a.push('MSDS 있음'); return a; }],
+        ['flag', '재고·유해', function (it) { var a = []; if (it.ok && it.price && it.stock !== '재고없음' && it.stock !== '재고납기문의') a.push('재고 있음'); a.push(it.hz === 'Y' ? '유해화학물질' : '일반시약'); if (it.cls.indexOf('LIM') >= 0) a.push('용도제한'); if (it.hal) a.push('19세 이상(환각물질)'); if (it.msds) a.push('MSDS 있음'); return a; }],
         ['band', '가격대', function (it) { if (!it.price) return ['가격문의']; for (var i = 0; i < BANDS.length; i++) if (it.price >= BANDS[i][1] && it.price < BANDS[i][2]) return [BANDS[i][0]]; return []; }]];
       function filt(skip) { return hits.filter(function (it) { return G.every(function (g) { return g[0] === skip || !SEL[g[0]] || !SEL[g[0]].size || g[2](it).some(function (v) { return SEL[g[0]].has(v); }); }); }); }
       function won(n) { return n ? Number(n).toLocaleString('ko-KR') + '원' : ''; }
@@ -30,9 +30,9 @@
         var link = it.no ? P + '/product/detail.html?product_no=' + it.no : '';
         var nm = link ? '<a class="s-pn" href="' + link + '">' + esc(it.name) + '</a>' : '<span class="s-pn off" title="상품 등록 준비중">' + esc(it.name) + '</span>';
         var pr = it.price ? '<del>' + won(it.was) + '</del><b>' + won(it.price) + '</b>' : '<b>가격문의</b>';
-        var st = !it.price ? '<span class="s-st0">문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
+        var st = !it.price ? '<span class="s-st0">문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : it.stock === '재고납기문의' ? '<span class="s-st0">재고납기문의</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
         var doc = it.murl ? '<a class="s-doc2" href="' + it.murl + '" target="_blank">MSDS</a>' : '<span class="s-doc2 off">MSDS</span>';
-        var buy = it.ban ? '<span class="s-cart off" title="판매하지 않는 물질(화학물질관리법 제18조)">판매불가</span>' : !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : !it.price ? '<a class="s-cart q" href="' + link + '">문의</a>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : (it.strict || !it.variant ? '<a class="s-cart" href="' + link + '" title="유해화학물질·환각물질은 상세에서 담기">담기</a>' : '<button type="button" class="s-cart" data-add="' + it.pk + '">담기</button>');
+        var buy = it.ban ? '<span class="s-cart off" title="판매하지 않는 물질(화학물질관리법 제18조)">판매불가</span>' : !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : (!it.price || it.stock === '재고납기문의') ? '<a class="s-cart q" href="' + link + '">문의</a>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : (it.strict || !it.variant ? '<a class="s-cart" href="' + link + '" title="유해화학물질·환각물질은 상세에서 담기">담기</a>' : '<button type="button" class="s-cart" data-add="' + it.pk + '">담기</button>');
         return '<tr><td>' + (it.ban ? '<span class="s-tag hz">판매불가</span>' : it.hz === 'Y' ? '<span class="s-tag hz">◆ 유해</span>' : '<span class="s-tag ok">◇ 일반</span>') + (it.hal ? '<span class="s-tag hal">19+</span>' : '') + (it.cls.indexOf('LIM') >= 0 ? '<span class="s-tag lim" title="' + esc(it.lim) + '">용도제한</span>' : '') + '<div class="s-mk3">' + esc(it.maker) + '</div></td>' +
           '<td class="s-cd">' + esc(it.pk) + '</td><td class="s-cd">' + esc(it.cas || '-') + '</td><td>' + nm + '<div class="s-sub2">' + esc([it.content, it.state].filter(Boolean).join(' · ')) + '</div></td>' +
           '<td>' + esc(it.grade || '-') + '</td><td>' + esc(it.packing || '-') + '</td><td class="s-pr2">' + pr + '</td><td>' + st + '</td><td>' + doc + '</td><td>' + buy + '</td></tr>';
