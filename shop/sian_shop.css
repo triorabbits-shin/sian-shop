@@ -403,3 +403,5 @@
 .s-cond.lim b{color:#5b3fd1}
 .s-notice{margin-top:8px;font-size:12px;color:#5b6575;line-height:1.6;padding:8px 12px;border-left:3px solid #cfd6e0;background:#fafbfd}
 .s-notice b{color:var(--s-navy);margin-right:4px}
+
+#sian-pd .s-ask{margin:10px 0 8px;padding:8px 10px;border:1px solid #f0c36d;background:#fff8e6;color:#7a5200;border-radius:6px;font-size:13px;line-height:1.5}

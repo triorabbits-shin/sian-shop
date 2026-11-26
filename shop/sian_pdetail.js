@@ -32,7 +32,8 @@
         var sizes = fam.filter(function (x) { return x.maker === me.maker && x.grade === me.grade; });
         var others = fam.filter(function (x) { return sizes.indexOf(x) < 0; });
         var img = S.B + 'shop/img/' + (me.state === '액체' ? 'liquid' : 'solid') + '.svg';
-        var stockTxt = function (x) { return !x.price ? '가격문의' : (!x.ok || x.stock === '재고없음' ? '재고없음' : '재고 ' + x.stock); };
+        var stockTxt = function (x) { return !x.price ? '가격문의' : (!x.ok || x.stock === '재고없음' ? '재고없음' : (/^\d/.test(x.stock) ? '재고 ' : '') + x.stock); };
+        var ASK = me.price && me.stock === '재고/입고 확인 후 출고';
         var info = [['CAS No.', me.cas || '-'], ['자체코드', me.pk], ['제조사', me.maker], ['등급', me.grade || '-'], ['포장', me.packing || '-'], ['재고', stockTxt(me)],
           ['함유량', me.content || '-'], ['배송안내', me.ship || '일반 택배 발송']];
         var left = '<div class="s-dl"><div class="s-ban"><img src="' + img + '" alt=""><div><small>REAGENT · BRAND</small><b>' + esc(me.maker) + '</b><span>' + (me.own ? '국산시약 · 공급사 직송' : '수입시약 · 공급사 입고') + '</span></div></div>' +
@@ -53,14 +54,14 @@
                 '<div class="s-szr">' + (x.price ? '<b>' + won(x.price) + '</b>' : '<b>문의</b>') +
                 (cur ? '' : (x.no ? '<a href="' + P + '/product/detail.html?product_no=' + x.no + '">보기</a>' : '<span>준비중</span>')) + '</div></div>';
             }).join('') +
-            '<div class="s-buy">' + qty + '<div class="s-tot"><span>선택: ' + esc(me.packing) + '</span><b id="s-tot">' + (me.price ? won(me.price) : '가격문의') + '</b></div>' +
+            (ASK ? '<div class="s-ask">재고/입고 확인 후 출고합니다. 주문 후 공급사 재고·입고 일정을 확인해 출고일을 안내해 드립니다.</div>' : '') + '<div class="s-buy">' + qty + '<div class="s-tot"><span>선택: ' + esc(me.packing) + '</span><b id="s-tot">' + (me.price ? won(me.price) : '가격문의') + '</b></div>' +
             '<div class="s-bb"><button type="button" class="c">장바구니</button><button type="button" class="b">바로구매</button></div>' +
             (!STRICT ? '<button type="button" class="s-multi">체크한 포장 모두 담기</button>' : BAN ? '' : '<div class="s-hzn">' + (me.hz === 'Y' ? '유해화학물질' : '환각물질') + '은 포장마다 이 화면에서 담고, 주문할 때 본인인증합니다.</div>') + '</div>' +
             (others.length ? '<div class="s-oth">같은 물질 다른 메이커·등급 ' + others.length + '개 <a href="' + S.search(me.cas || me.name) + '">비교하기 →</a></div>' : '') + '</div>';
         } else {
           right = '<div class="s-side"><div class="s-sh">구매</div><div class="s-one"><div><small>' + esc(me.packing || '') + '</small><b>' + esc(stockTxt(me)) + '</b></div>' +
             (me.price ? '<div><del>' + won(me.was) + '</del><em>' + me.rate + '%</em><b>' + won(me.price) + '</b></div>' : '<div><b>가격문의</b></div>') + '</div>' +
-            '<div class="s-buy">' + qty + '<div class="s-tot"><span>판매가 합계 (VAT 포함)</span><b id="s-tot">' + (me.price ? won(me.price) : '가격문의') + '</b></div>' +
+            (ASK ? '<div class="s-ask">재고/입고 확인 후 출고합니다. 주문 후 공급사 재고·입고 일정을 확인해 출고일을 안내해 드립니다.</div>' : '') + '<div class="s-buy">' + qty + '<div class="s-tot"><span>판매가 합계 (VAT 포함)</span><b id="s-tot">' + (me.price ? won(me.price) : '가격문의') + '</b></div>' +
             '<div class="s-bb"><button type="button" class="c">장바구니</button><button type="button" class="b">바로구매</button></div></div>' +
             (others.length ? '<div class="s-oth">같은 물질 다른 상품 ' + others.length + '개 <a href="' + S.search(me.cas || me.name) + '">비교하기 →</a></div>' : '') + '</div>';
         }
