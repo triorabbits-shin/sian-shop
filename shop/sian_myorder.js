@@ -12,6 +12,14 @@
       box.innerHTML = '<div class="s-cnote"><b>학교/기관 후불결제 · 유해화학물질 주문 안내</b>후불결제 주문과 본인인증을 나중에 하기로 한 유해화학물질 주문은 사업자등록증(고유번호증)을 받은 뒤 출고합니다. ' +
         '세금계산서는 배송완료 후 이 화면의 <b>세금계산서 신청</b>으로 신청하면 발행됩니다(무통장 등 현금 결제만).</div>' + S.bizdoc(no, '');
       c.insertBefore(box, c.firstChild);
+      // 세금계산서 신청(사용자 지시 2026-11-26: 고객이 주문내역에서 단추를 눌러 발행) — 카페24 원래 '세금계산서 신청' 단추를 대신 눌러 줌
+      var taxBtn = [].slice.call(document.querySelectorAll('a[onclick*="issue/tax.html"]'))[0];
+      if (taxBtn) {
+        var tx = document.createElement('div'); tx.className = 's-bizdoc';
+        tx.innerHTML = '<div><b>세금계산서 발행 신청</b><span>무통장 등 현금 결제 주문은 아래 단추로 신청하면, 입금 확인·배송완료 후 전자 세금계산서가 발행됩니다(카드 결제는 카드 전표가 증빙). 사업자등록번호·상호·담당 메일을 적어 주세요.</span></div><a href="#none">세금계산서 신청</a>';
+        tx.querySelector('a').onclick = function (e) { e.preventDefault(); taxBtn.click(); };
+        box.appendChild(tx);
+      }
       return;
     }
     // 주문내역 목록: 주문번호마다 작은 '등록증 제출' 링크
