@@ -48,7 +48,7 @@ async function one(pk) {
   const [prod, ms, nm] = await Promise.all([J(`product/${pre}_${sh}.json`), J(`msds/${String(crc32(pk) % MAN.shards.msds).padStart(3, '0')}.json`), J(`names_sh/${pre}_${sh}.json`).catch(() => ({}))]);
   const D = prod[pk]; if (!D) return `<div class="sheet pg">상품 ${esc(pk)} 정보를 찾지 못했습니다.</div>`;
   const M = ms[pk] || {}, N = nm[pk] || [];
-  const J0 = (D.judge || []).filter(j => j.jd_res && j.jd_res !== '미해당');
+  const J0 = (D.judge || []).filter(j => j.jd_res && j.jd_res !== '미해당' && /유해화학물질|용도제한|허가필요|판매금지/.test(j.jd_disp || ''));   // 유해화학물질등(법 제17조)만, 주의정보 제외
   const cls = J0.map(j => `${j.jd_disp}: ${j.jd_kind || j.jd_cls}${j.jd_unq ? ' (지정번호 ' + j.jd_unq + ')' : ''}${j.jd_crit ? ' — ' + j.jd_crit : ''}`);
   const lim = J0.filter(j => j.jd_disp === '용도제한').map(j => (j.jd_excp || '').replace(/<br\s*\/?>/g, ' ').replace(/\s+/g, ' ').trim());
   const name = (N[0] || D.name_orig || pk);

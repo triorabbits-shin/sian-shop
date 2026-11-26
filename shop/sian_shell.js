@@ -65,7 +65,7 @@
       '<div class="s-icons"><a href="' + P + '/myshop/index.html">마이페이지</a><a href="' + P + '/order/basket.html">장바구니</a><a class="s-strong" href="' + P + '/member/agreement.html">회원가입</a></div></div></div>' +
       '<div class="s-nav"><div class="s-in"><span class="s-lbl">MAKERS</span>' +
       ['삼전순약', '대정화금', '덕산약품', 'Junsei', 'Kanto', 'Wako', 'Acros', 'Alfa Aesar'].map(function (m) { return '<a href="' + window.SIAN.search(m) + '">' + esc(m) + '</a>'; }).join('') +
-      '<span class="s-sp"></span><a class="s-r" href="' + window.SIAN.search('유해') + '">유해화학물질 구매안내</a><a class="s-r" href="' + P + '/board/free/list.html?board_no=6">상품문의</a></div></div>';
+      '<span class="s-sp"></span><a class="s-r" href="' + P + '/shopinfo/guide.html#sian-notice">유해화학물질 구매안내</a><a class="s-r" href="' + P + '/board/free/list.html?board_no=6">상품문의</a></div></div>';
     var hd = document.getElementById('header');
     (hd ? hd.parentNode : document.body).insertBefore(h, hd ? hd : document.body.firstChild);
     document.documentElement.classList.add('sian-on');
@@ -86,6 +86,29 @@
     };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tryAuth); else tryAuth();
   }
+  /* 홈페이지 고지 (화학물질관리법 시행규칙 제31조의2제2호: 통신판매는 인터넷 홈페이지에 게재, 2026-11-26) — 이용안내 화면 맨 위 */
+  function notice() {
+    if (!/\/shopinfo\/guide\.html/.test(location.pathname) || document.getElementById('sian-notice')) return;
+    var c = document.getElementById('contents'); if (!c) return setTimeout(notice, 100);
+    var n = document.createElement('div'); n.id = 'sian-notice';
+    n.innerHTML = '<h2>유해화학물질 구매안내 · 판매자 고지</h2>' +
+      '<section><h3>1. 「화학물질관리법」 제29조의2제1항에 따른 고지</h3><ol>' +
+      '<li>시험용·연구용·검사용 시약은 <b>해당 용도로만</b> 사용하여야 합니다.</li><li>취급 시 유해화학물질 취급기준을 준수하여야 합니다.</li>' +
+      '<li>판매하는 화학물질이 유해화학물질등(유해화학물질·허가물질·제한물질·금지물질)에 해당하는지는 상품 화면에 표시합니다.</li>' +
+      '<li>용도제한이 있는 물질은 그 용도로 취급하지 말거나 그 용도로만 취급하여야 합니다. 제한 내용은 상품 화면과 주문서에 표시합니다.</li></ol>' +
+      '<p>유해화학물질등은 상품마다 <b>정보요약서</b>(같은 법 시행규칙 별지 제47호의2서식, 전자문서)를 상품 상세·주문 완료·주문내역에서 제공합니다.</p></section>' +
+      '<section><h3>2. 판매 원칙</h3><ul><li>모든 시약은 <b>연구·분석·검사 목적</b>으로만 판매하며, 주문할 때 주문 목적을 선택합니다.</li>' +
+      '<li>금지물질은 판매하지 않습니다(같은 법 제18조제1항).</li></ul></section>' +
+      '<section><h3>3. 유해화학물질 구매자 확인 (같은 법 제28조의2, 시행규칙 제30조의2)</h3><ul>' +
+      '<li>유해화학물질이 포함된 주문은 <b>주문할 때마다</b> 구매자 실명·연령 확인 및 본인 인증을 거칩니다.</li>' +
+      '<li>방법: 휴대폰 본인인증(본인확인기관) 또는 사업자등록증(고유번호증) 확인. 확인이 끝나야 출고합니다.</li>' +
+      '<li>환각물질(톨루엔·초산에틸·메틸알코올 등)은 「청소년 보호법」 제28조에 따라 <b>19세 미만에게 판매하지 않습니다</b>.</li></ul></section>' +
+      '<section><h3>4. 학교/기관 후불결제</h3><ul><li>학교·공공기관·연구기관 등 공적기관은 회원 로그인 후 주문서에서 <b>학교/기관 후불결제</b>를 선택할 수 있습니다(무통장 입금, 출고일로부터 30일 이내).</li>' +
+      '<li>주문 후 담당자 메일·문자로 안내를 드리며, 사업자등록증(고유번호증)은 메일로 제출합니다. 세금계산서는 배송완료 후 주문내역에서 신청합니다.</li></ul></section>';
+    c.insertBefore(n, c.firstChild);
+    if (location.hash === '#sian-notice') n.scrollIntoView();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', notice); else notice();
   var cssOk = false, domOk = document.readyState !== 'loading', done = false;
   function go() { if (!done && cssOk && domOk) { done = true; head(); } }   // CSS가 들어온 뒤 머리글을 넣음(꾸밈 없는 머리글이 잠깐 보이지 않게)
   css.onload = function () { cssOk = true; go(); }; css.onerror = function () { cssOk = true; go(); };
