@@ -31,24 +31,6 @@
     return '<div class="s-bizdoc"><div><b>사업자등록증(고유번호증) 제출</b><span>PDF 파일을 메일로 보내 주세요. 받는 주소 <b>' + M + '</b> · 제목 「' + esc(subj) + '」</span></div>' +
       '<a href="mailto:' + M + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body) + '">메일로 제출하기</a></div>';
   };
-  /* 유해화학물질등 정보요약서(시행규칙 별지 제47호의2, 전자문서) 주소 */
-  window.SIAN.summary = function (pks, order) { return B + 'shop/summary.html?pk=' + encodeURIComponent(pks.join(',')) + (order ? '&order=' + encodeURIComponent(order) : ''); };
-  window.SIAN.summaryBox = function (pks, order) {
-    if (!pks.length) return '';
-    return '<div class="s-bizdoc"><div><b>유해화학물질등 정보요약서</b><span>「화학물질관리법」 제29조의2·시행규칙 제31조의2에 따른 고지 문서입니다(' + pks.length + '개 상품). 인쇄하거나 PDF로 저장할 수 있습니다.</span></div>' +
-      '<a href="' + window.SIAN.summary(pks, order) + '" target="_blank">정보요약서 보기</a></div>';
-  };
-  /* 페이지 안 상품 링크(product_no) -> cartinfo.json -> 유해화학물질등(HZ·LIM·PER) 상품코드 */
-  window.SIAN.hazPks = function (root) {
-    return fetch(B + 'shop/cartinfo.json?v=' + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }).then(function (I) {
-      var out = [];
-      [].slice.call((root || document).querySelectorAll('a[href*="product_no="], a[href*="/product/"]')).forEach(function (a) {
-        var m = (a.getAttribute('href') || '').match(/product_no=(\d+)|\/product\/[^/]*\/(\d+)\//), no = m && (m[1] || m[2]), d = no && I[no];
-        if (d && (d.hz === 'Y' || /LIM|PER/.test(d.cls || '')) && out.indexOf(d.pk) < 0) out.push(d.pk);
-      });
-      return out;
-    });
-  };
   window.SIAN.toast = function (msg, link) {
     var t = document.createElement('div'); t.className = 's-toast';
     t.innerHTML = '<span>' + esc(msg) + '</span>' + (link ? '<a href="' + link + '">장바구니 보기</a>' : '');
@@ -96,7 +78,7 @@
       '<li>시험용·연구용·검사용 시약은 <b>해당 용도로만</b> 사용하여야 합니다.</li><li>취급 시 유해화학물질 취급기준을 준수하여야 합니다.</li>' +
       '<li>판매하는 화학물질이 유해화학물질등(유해화학물질·허가물질·제한물질·금지물질)에 해당하는지는 상품 화면에 표시합니다.</li>' +
       '<li>용도제한이 있는 물질은 그 용도로 취급하지 말거나 그 용도로만 취급하여야 합니다. 제한 내용은 상품 화면과 주문서에 표시합니다.</li></ol>' +
-      '<p>유해화학물질등은 상품마다 <b>정보요약서</b>(같은 법 시행규칙 별지 제47호의2서식, 전자문서)를 상품 상세·주문 완료·주문내역에서 제공합니다.</p></section>' +
+      '</section>' +
       '<section><h3>2. 판매 원칙</h3><ul><li>모든 시약은 <b>연구·분석·검사 목적</b>으로만 판매하며, 주문할 때 주문 목적을 선택합니다.</li>' +
       '<li>금지물질은 판매하지 않습니다(같은 법 제18조제1항).</li></ul></section>' +
       '<section><h3>3. 유해화학물질 구매자 확인 (같은 법 제28조의2, 시행규칙 제30조의2)</h3><ul>' +

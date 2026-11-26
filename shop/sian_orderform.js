@@ -244,7 +244,6 @@
     var fr = document.getElementById('frm_order_result'), sh = document.getElementById('sian-head');   // 주문 완료는 #contents가 없음 -> 주문 결과 양식 앞(머리글 아래)
     if (fr) fr.parentNode.insertBefore(h0, fr); else if (sh) sh.parentNode.insertBefore(h0, sh.nextSibling); else c0.insertBefore(h0, c0.firstChild);
     try { sessionStorage.removeItem('sian_last_order'); } catch (e) { }
-    S.hazPks(fr || document).then(function (pks) { if (pks.length) h0.insertAdjacentHTML('beforeend', S.summaryBox(pks, no)); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();

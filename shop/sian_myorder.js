@@ -12,7 +12,6 @@
       box.innerHTML = '<div class="s-cnote"><b>학교/기관 후불결제 · 유해화학물질 주문 안내</b>후불결제 주문과 본인인증을 나중에 하기로 한 유해화학물질 주문은 사업자등록증(고유번호증)을 받은 뒤 출고합니다. ' +
         '세금계산서는 배송완료 후 이 화면의 <b>세금계산서 신청</b>으로 신청하면 발행됩니다(무통장 등 현금 결제만).</div>' + S.bizdoc(no, '');
       c.insertBefore(box, c.firstChild);
-      S.hazPks(c).then(function (pks) { if (pks.length) box.insertAdjacentHTML('beforeend', S.summaryBox(pks, no)); });
       return;
     }
     // 주문내역 목록: 주문번호마다 작은 '등록증 제출' 링크
