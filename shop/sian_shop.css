@@ -407,3 +407,11 @@
 @media(max-width:600px){#sian-ask .s-ah{display:block;margin:4px 0 0}}
 #s_atel{width:220px;max-width:100%}
 .typeProduct .s-pinf{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:#444}.typeProduct .s-pinf b{color:#888;font-weight:500;margin-right:2px}
+#sian-pdf{position:fixed;inset:0;z-index:2147483000;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}
+#sian-pdf .s-pdfbox{background:#fff;border-radius:10px;width:min(1000px,100%);height:100%;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+#sian-pdf .s-pdfh{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #e5e7eb}#sian-pdf .s-pdfh b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#sian-pdf .s-sp{flex:1}
+#sian-pdf .s-pbtn{display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #cfd6e0;border-radius:6px;background:#fff;color:#1e293b;font-size:14px;cursor:pointer;text-decoration:none}
+#sian-pdf .s-pbtn:hover{background:#f1f5f9}#sian-pdf .s-pbtn.x{padding:0 11px}
+#sian-pdf .s-pdfb{flex:1;overflow:auto;background:#525659;text-align:center}#sian-pdf .s-pdfb iframe{width:100%;height:100%;border:0;display:block}
+#sian-pdf .s-pdfb canvas{display:block;margin:8px auto;background:#fff;max-width:calc(100% - 16px)}#sian-pdf .s-load{color:#fff;padding:40px 16px}#sian-pdf .s-load a{color:#fff;text-decoration:underline}
+@media(max-width:768px){#sian-pdf{padding:0}#sian-pdf .s-pdfbox{border-radius:0}#sian-pdf .s-pbtn{padding:0 10px;font-size:13px}}

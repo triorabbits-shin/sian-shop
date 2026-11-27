@@ -68,6 +68,52 @@
     };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tryAuth); else tryAuth();
   }
+  /* MSDS 보기(사용자 지시 2026-11-27): MSDS 링크를 누르면 내려받지 않고 PDF를 바로 보여 주고, 저장·인쇄는 단추로 고름.
+     PC = 브라우저 PDF 화면(iframe), 모바일 = pdf.js로 쪽마다 그림. 모든 화면의 /file_data/…pdf · msds/…pdf 링크에 자동 적용 */
+  var PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+  function loadPdfjs() {
+    return window.pdfjsLib ? Promise.resolve(window.pdfjsLib) : new Promise(function (ok, no) {
+      var s = document.createElement('script'); s.src = PDFJS + 'pdf.min.js';
+      s.onload = function () { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js'; ok(window.pdfjsLib); }; s.onerror = no; document.head.appendChild(s);
+    });
+  }
+  window.SIAN.msds = function (url, name) {
+    var old = document.getElementById('sian-pdf'); if (old) old.remove();
+    var mob = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+    var file = (name || 'MSDS').replace(/[\/:*?"<>|]/g, '_') + '.pdf';
+    var w = document.createElement('div'); w.id = 'sian-pdf';
+    w.innerHTML = '<div class="s-pdfbox"><div class="s-pdfh"><b>' + esc(name || 'MSDS') + '</b><span class="s-sp"></span>' +
+      '<a class="s-pbtn" href="' + esc(url) + '" download="' + esc(file) + '">저장</a><button type="button" class="s-pbtn" data-p="print">인쇄</button>' +
+      '<button type="button" class="s-pbtn x" data-p="close" aria-label="닫기">✕</button></div><div class="s-pdfb"><div class="s-load">MSDS를 불러오는 중입니다…</div></div></div>';
+    document.body.appendChild(w); document.documentElement.style.overflow = 'hidden';
+    var body = w.querySelector('.s-pdfb'), frame = null;
+    var close = function () { w.remove(); document.documentElement.style.overflow = ''; document.removeEventListener('keydown', esc1); };
+    var esc1 = function (e) { if (e.key === 'Escape') close(); }; document.addEventListener('keydown', esc1);
+    w.onclick = function (e) {
+      if (e.target === w || e.target.dataset.p === 'close') close();
+      if (e.target.dataset.p === 'print') { if (frame && frame.contentWindow) { try { frame.contentWindow.focus(); frame.contentWindow.print(); return; } catch (x) { } } window.open(url, '_blank'); }
+    };
+    if (!mob) { frame = document.createElement('iframe'); frame.src = url + '#view=FitH'; frame.title = name || 'MSDS'; body.innerHTML = ''; body.appendChild(frame); return; }
+    loadPdfjs().then(function (lib) { return lib.getDocument(url).promise; }).then(function (pdf) {
+      body.innerHTML = ''; var wd = Math.min(body.clientWidth - 16, 900), n = 0;
+      (function next() {
+        if (++n > pdf.numPages) return;
+        pdf.getPage(n).then(function (pg) {
+          var v = pg.getViewport({ scale: 1 }), sc = wd / v.width, r = window.devicePixelRatio || 1, vp = pg.getViewport({ scale: sc * r });
+          var c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height; c.style.width = (vp.width / r) + 'px'; body.appendChild(c);
+          pg.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(next);
+        });
+      })();
+    }).catch(function () { body.innerHTML = '<div class="s-load">화면에 표시하지 못했습니다. <a href="' + esc(url) + '" target="_blank">새 창에서 열기</a></div>'; });
+  };
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]'); if (!a || a.hasAttribute('download') || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    var h = a.getAttribute('href') || '';
+    if (!/\/file_data\/.+\.pdf$|\/msds\/[^?#]+\.(pdf|txt)$/i.test(h)) return;
+    e.preventDefault();
+    var row = a.closest('tr, .s-ctag, .s-pd, li, .prdBox'), pk = row && ((row.innerText || '').match(/\b(SJ|DJ|DSP)_[A-Za-z0-9-]+/) || [])[0];
+    window.SIAN.msds(h, 'MSDS' + (pk ? ' ' + pk : ''));
+  }, true);
   /* 상품 문의(재고·납기·가격·규격) — 사용자 결정 2026-11-26: 문의 단추 -> 카페24 '상품 Q&A'(6번) 비밀글, 연락받을 번호(카페24 이메일 칸 옆에 한 칸 추가)를 본문 첫 줄 `[연락받을번호]`로 저장, 메일은 카페24 이메일 칸(writer_email).
      관리자가 답변하면 관리자 PC 프로그램(admin_ask.py)이 문자·메일로 회신. it = {pk, name, packing, no}, kind = 재고납기문의|가격문의|규격·COA 문의 */
   window.SIAN.ask = function (kind, it) {

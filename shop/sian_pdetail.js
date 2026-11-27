@@ -38,7 +38,7 @@
           ['함유량', me.content || '-'], ['배송안내', me.ship || '일반 택배 발송']];
         var left = '<div class="s-dl"><div class="s-ban"><img src="' + img + '" alt=""><div><small>REAGENT · BRAND</small><b>' + esc(me.maker) + '</b><span>' + (me.own ? '국산시약 · 공급사 직송' : '수입시약 · 공급사 입고') + '</span></div></div>' +
           '<h1 class="s-ttl">' + esc(me.name) + '</h1><div class="s-st2">' + esc(me.orig) + '</div>' +
-          '<div class="s-dbtn">' + (me.murl ? '<a href="' + me.murl + '" target="_blank">⤓ MSDS</a>' : '<span class="off">MSDS 없음</span>') +
+          '<div class="s-dbtn">' + (me.murl ? '<a href="' + me.murl + '" target="_blank">MSDS 보기</a>' : '<span class="off">MSDS 없음</span>') +
           '<a href="#none" data-ask="규격·COA 문의">규격·COA 문의</a></div>' +
           '<div class="s-info">' + info.map(function (r) { return '<div><small>' + r[0] + '</small><b>' + esc(r[1]) + '</b></div>'; }).join('') + '</div>' +
           cond.join('') + '</div>';
