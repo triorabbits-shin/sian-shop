@@ -32,7 +32,7 @@
         var sizes = fam.filter(function (x) { return x.maker === me.maker && x.grade === me.grade; });
         var others = fam.filter(function (x) { return sizes.indexOf(x) < 0; });
         var img = S.B + 'shop/img/' + (me.state === '액체' ? 'liquid' : 'solid') + '.svg';
-        var stockTxt = function (x) { return !x.price ? '가격문의' : (!x.ok || x.stock === '재고없음' ? '재고없음' : (/^\d/.test(x.stock) ? '재고 ' : '') + x.stock); };
+        var stockTxt = function (x) { return !x.price ? '재고납기문의' : (!x.ok || x.stock === '재고없음' ? '재고없음' : (/^\d/.test(x.stock) ? '재고 ' : '') + x.stock); };
         var ASK = me.price && me.stock === '재고납기문의';   // 덕산 Call 재고: 주문 대신 문의(사용자 결정 2026-11-26)
         var info = [['CAS No.', me.cas || '-'], ['자체코드', me.pk], ['제조사', me.maker], ['등급', me.grade || '-'], ['포장', me.packing || '-'], ['재고', stockTxt(me)],
           ['함유량', me.content || '-'], ['배송안내', me.ship || '일반 택배 발송']];

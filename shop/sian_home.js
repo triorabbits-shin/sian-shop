@@ -12,7 +12,7 @@
       var regions = ['한국', '일본', '미국', '유럽', '기타'];
       var cnt = {}; regions.forEach(function (r) { cnt[r] = H.makers.filter(function (m) { return m.country === r; }).length; });
       var prod = function (p) {
-        var stock = !p.price ? '<span class="s-tag no">가격문의</span>' : (!p.ok ? '<span class="s-tag no">재고없음</span>' : '<span class="s-tag ok">' + (/^\d/.test(p.stock) ? '재고 ' : '') + esc(p.stock) + '</span>');
+        var stock = !p.price ? '<span class="s-tag no">재고납기문의</span>' : (!p.ok ? '<span class="s-tag no">재고없음</span>' : '<span class="s-tag ok">' + (/^\d/.test(p.stock) ? '재고 ' : '') + esc(p.stock) + '</span>');
         return '<a class="s-prod" href="' + P + '/product/detail.html?product_no=' + p.no + '"><span class="s-mk2">' + esc(p.maker) + ' · ' + esc(p.pk) + '</span>' +
           '<span class="s-nm">' + esc(p.name) + '</span><span class="s-sp2">' + [p.cas && 'CAS ' + p.cas, p.grade, p.packing].filter(Boolean).map(esc).join(' · ') + '</span>' +
           '<span>' + (p.hz === 'Y' ? '<span class="s-tag hz">유해화학물질</span> ' : '') + stock + '</span>' +

@@ -30,9 +30,10 @@
         var link = it.no ? P + '/product/detail.html?product_no=' + it.no : '';
         var nm = link ? '<a class="s-pn" href="' + link + '">' + esc(it.name) + '</a>' : '<span class="s-pn off" title="상품 등록 준비중">' + esc(it.name) + '</span>';
         var pr = it.price ? '<del>' + won(it.was) + '</del><b>' + won(it.price) + '</b>' : '<b>가격문의</b>';
-        var st = !it.price ? '<span class="s-st0">문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : it.stock === '재고납기문의' ? '<span class="s-st0">재고납기문의</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
+        var ask = !it.ban && (!it.price || it.stock === '재고납기문의');   // 가격·재고 문의 상품(사용자 결정 2026-11-27)
+        var st = !it.price ? '<span class="s-st0">재고납기문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : it.stock === '재고납기문의' ? '<span class="s-st0">재고납기문의</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
         var doc = it.murl ? '<a class="s-doc2" href="' + it.murl + '" target="_blank">MSDS</a>' : '<span class="s-doc2 off">MSDS</span>';
-        var buy = it.ban ? '<span class="s-cart off" title="판매하지 않는 물질(화학물질관리법 제18조)">판매불가</span>' : !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : (!it.price || it.stock === '재고납기문의') ? '<a class="s-cart q" href="' + link + '">문의</a>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : (it.strict || !it.variant ? '<a class="s-cart" href="' + link + '" title="유해화학물질·환각물질은 상세에서 담기">담기</a>' : '<button type="button" class="s-cart" data-add="' + it.pk + '">담기</button>');
+        var buy = it.ban ? '<span class="s-cart off" title="판매하지 않는 물질(화학물질관리법 제18조)">판매불가</span>' : ask ? '<button type="button" class="s-cart q" data-ask="' + it.pk + '">문의</button>' : !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : (it.strict || !it.variant ? '<a class="s-cart" href="' + link + '" title="유해화학물질·환각물질은 상세에서 담기">담기</a>' : '<button type="button" class="s-cart" data-add="' + it.pk + '">담기</button>');
         return '<tr><td>' + (it.ban ? '<span class="s-tag hz">판매불가</span>' : it.hz === 'Y' ? '<span class="s-tag hz">◆ 유해</span>' : '<span class="s-tag ok">◇ 일반</span>') + (it.hal ? '<span class="s-tag hal">19+</span>' : '') + (it.cls.indexOf('LIM') >= 0 ? '<span class="s-tag lim" title="' + esc(it.lim) + '">용도제한</span>' : '') + '<div class="s-mk3">' + esc(it.maker) + '</div></td>' +
           '<td class="s-cd">' + esc(it.pk) + '</td><td class="s-cd">' + esc(it.cas || '-') + '</td><td>' + nm + '<div class="s-sub2">' + esc([it.content, it.state].filter(Boolean).join(' · ')) + '</div></td>' +
           '<td>' + esc(it.grade || '-') + '</td><td>' + esc(it.packing || '-') + '</td><td class="s-pr2">' + pr + '</td><td>' + st + '</td><td>' + doc + '</td><td>' + buy + '</td></tr>';
@@ -61,6 +62,8 @@
         box.firstChild.innerHTML = h;
         box.querySelectorAll('.s-chip').forEach(function (b) { b.onclick = function () { var g = b.dataset.g, v = b.dataset.v; SEL[g] = SEL[g] || new Set(); SEL[g].has(v) ? SEL[g].delete(v) : SEL[g].add(v); PAGE = { own: 1, imp: 1 }; draw(); }; });
         box.querySelectorAll('.s-pg button').forEach(function (b) { b.onclick = function () { PAGE[b.dataset.k] = +b.dataset.p; draw(); }; });
+        box.querySelectorAll('[data-ask]').forEach(function (b) { b.onclick = function () {
+          var it = items.filter(function (x) { return x.pk === b.dataset.ask; })[0]; if (it) S.ask(it.price ? '재고납기문의' : '가격문의', it); }; });
         box.querySelectorAll('[data-add]').forEach(function (b) { b.onclick = function () {
           var it = items.filter(function (x) { return x.pk === b.dataset.add; })[0]; b.disabled = true; b.textContent = '담는 중';
           S.addCart([{ no: it.no, variant: it.variant, name: it.name, price: it.price, qty: 1 }]).then(function () { b.disabled = false; b.textContent = '담기'; });
