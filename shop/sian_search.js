@@ -40,12 +40,17 @@
       }
       function table(key, title, list) {
         var size = 20, pages = Math.max(1, Math.ceil(list.length / size)); if (PAGE[key] > pages) PAGE[key] = pages;
-        var a = Math.max(1, PAGE[key] - 4), b = Math.min(pages, a + 9), pg = '';
-        for (var i = a; i <= b; i++) pg += '<button data-k="' + key + '" data-p="' + i + '" class="' + (i === PAGE[key] ? 'on' : '') + '">' + i + '</button>';
-        if (pages > b) pg += '<button data-k="' + key + '" data-p="' + (b + 1) + '">다음</button><span>' + pages + '쪽</span>';
+        // 쪽 번호(사용자 지시 2026-11-27): 위·아래 모두, 쪽이 많으면 1 … 4 5 [6] 7 8 … 100 + 이전·다음
+        var cur = PAGE[key], btn = function (p, t, cls) { return '<button type="button" data-k="' + key + '" data-p="' + p + '" class="' + (cls || '') + '"' + (t === undefined ? '' : ' aria-label="' + t + '"') + '>' + (t || p) + '</button>'; };
+        var nums = [], lo = Math.max(1, cur - 2), hi = Math.min(pages, cur + 2);
+        if (cur <= 3) hi = Math.min(pages, 5); if (cur >= pages - 2) lo = Math.max(1, pages - 4);
+        if (lo > 1) { nums.push(btn(1)); if (lo > 2) nums.push('<span class="s-dot">…</span>'); }
+        for (var i = lo; i <= hi; i++) nums.push(btn(i, undefined, i === cur ? 'on' : ''));
+        if (hi < pages) { if (hi < pages - 1) nums.push('<span class="s-dot">…</span>'); nums.push(btn(pages)); }
+        var pg = pages < 2 ? '' : (cur > 1 ? btn(cur - 1, '‹', 'nav') : '') + nums.join('') + (cur < pages ? btn(cur + 1, '›', 'nav') : '');
         return '<div class="s-card"><div class="s-ch"><b>' + title + '</b><span>「' + esc(Q || '전체') + '」 ' + list.length.toLocaleString() + '건</span><span class="s-pg">' + pg + '</span></div>' +
           (list.length ? '<div class="s-tw"><table class="s-tb"><thead><tr><th>구분/브랜드</th><th>제품코드</th><th>CAS</th><th>제품명</th><th>등급</th><th>포장</th><th>판매가</th><th>재고</th><th>정보</th><th>장바구니</th></tr></thead><tbody>' +
-            list.slice((PAGE[key] - 1) * size, PAGE[key] * size).map(row).join('') + '</tbody></table></div>' : '<div class="s-empty">조건에 맞는 상품이 없습니다.</div>') + '</div>';
+            list.slice((PAGE[key] - 1) * size, PAGE[key] * size).map(row).join('') + '</tbody></table></div>' + (pg ? '<div class="s-pgb"><span class="s-pg">' + pg + '</span></div>' : '') : '<div class="s-empty">조건에 맞는 상품이 없습니다.</div>') + '</div>';
       }
       function draw() {
         var isList = /list\.html/.test(location.pathname), label = isList ? document.title.split(' - ')[0] : (Q || '전체 상품');
@@ -62,7 +67,8 @@
         h += table('own', '국산시약', list.filter(function (x) { return x.own; })) + table('imp', '수입시약', list.filter(function (x) { return !x.own; }));
         box.firstChild.innerHTML = h;
         box.querySelectorAll('.s-chip').forEach(function (b) { b.onclick = function () { var g = b.dataset.g, v = b.dataset.v; SEL[g] = SEL[g] || new Set(); SEL[g].has(v) ? SEL[g].delete(v) : SEL[g].add(v); PAGE = { own: 1, imp: 1 }; draw(); }; });
-        box.querySelectorAll('.s-pg button').forEach(function (b) { b.onclick = function () { PAGE[b.dataset.k] = +b.dataset.p; draw(); }; });
+        box.querySelectorAll('.s-pg button').forEach(function (b) { b.onclick = function () { var low = !!b.closest('.s-pgb'), k = b.dataset.k; PAGE[k] = +b.dataset.p; draw();
+          if (low) { var c = box.querySelector('.s-pg button[data-k="' + k + '"]'); c = c && c.closest('.s-card'); if (c) c.scrollIntoView({ block: 'start', behavior: 'smooth' }); } }; });
         box.querySelectorAll('[data-ask]').forEach(function (b) { b.onclick = function () {
           var it = items.filter(function (x) { return x.pk === b.dataset.ask; })[0]; if (it) S.ask('재고납기문의', it); }; });
         box.querySelectorAll('[data-add]').forEach(function (b) { b.onclick = function () {

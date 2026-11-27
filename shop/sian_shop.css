@@ -125,6 +125,8 @@
 .s-pg{margin-left:auto;display:flex;gap:4px;align-items:center}
 .s-pg button{min-width:30px;height:30px;border:1px solid var(--s-line);background:#fff;border-radius:6px;cursor:pointer}
 .s-pg button.on{background:var(--s-navy);color:#fff;border-color:var(--s-navy)}
+.s-pg .s-dot{min-width:18px;text-align:center;color:#94a3b8}.s-pg button.nav{font-size:16px}
+.s-pgb{display:flex;justify-content:center;padding:12px 8px;border-top:1px solid var(--s-line)}.s-pgb .s-pg{margin:0;flex-wrap:wrap;justify-content:center}
 .s-tw{overflow-x:auto}
 .s-tb{width:100%;border-collapse:collapse;font-size:13px}
 .s-tb th{background:#eef3fb;color:#2b3a52;padding:10px 8px;text-align:left;border-bottom:1px solid var(--s-line);white-space:nowrap}
