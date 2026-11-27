@@ -57,13 +57,14 @@
           h += '<div class="s-fr"><span>' + g[1] + '</span><div>' + vals.slice(0, 16).map(function (v) { return '<button class="s-chip' + (SEL[g[0]] && SEL[g[0]].has(v) ? ' on' : '') + '" data-g="' + g[0] + '" data-v="' + esc(v) + '">' + esc(v) + '<small>' + cnt[v] + '</small></button>'; }).join('') + '</div></div>';
         });
         h += '</div>';
-        var list = filt(null).sort(function (a, b) { return b.score - a.score || (b.no ? 1 : 0) - (a.no ? 1 : 0) || a.pk.localeCompare(b.pk); });
+        var bad = function (x) { return (!x.price || !x.ok || x.stock === '재고없음' || x.stock === '재고납기문의') ? 1 : 0; };   // 재고없음·가격문의·재고납기문의는 맨 뒤(사용자 지시 2026-11-27)
+        var list = filt(null).sort(function (a, b) { return bad(a) - bad(b) || b.score - a.score || (b.no ? 1 : 0) - (a.no ? 1 : 0) || a.pk.localeCompare(b.pk); });
         h += table('own', '국산시약', list.filter(function (x) { return x.own; })) + table('imp', '수입시약', list.filter(function (x) { return !x.own; }));
         box.firstChild.innerHTML = h;
         box.querySelectorAll('.s-chip').forEach(function (b) { b.onclick = function () { var g = b.dataset.g, v = b.dataset.v; SEL[g] = SEL[g] || new Set(); SEL[g].has(v) ? SEL[g].delete(v) : SEL[g].add(v); PAGE = { own: 1, imp: 1 }; draw(); }; });
         box.querySelectorAll('.s-pg button').forEach(function (b) { b.onclick = function () { PAGE[b.dataset.k] = +b.dataset.p; draw(); }; });
         box.querySelectorAll('[data-ask]').forEach(function (b) { b.onclick = function () {
-          var it = items.filter(function (x) { return x.pk === b.dataset.ask; })[0]; if (it) S.ask(it.price ? '재고납기문의' : '가격문의', it); }; });
+          var it = items.filter(function (x) { return x.pk === b.dataset.ask; })[0]; if (it) S.ask('재고납기문의', it); }; });
         box.querySelectorAll('[data-add]').forEach(function (b) { b.onclick = function () {
           var it = items.filter(function (x) { return x.pk === b.dataset.add; })[0]; b.disabled = true; b.textContent = '담는 중';
           S.addCart([{ no: it.no, variant: it.variant, name: it.name, price: it.price, qty: 1 }]).then(function () { b.disabled = false; b.textContent = '담기'; });

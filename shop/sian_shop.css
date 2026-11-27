@@ -405,3 +405,5 @@
 .s-notice b{color:var(--s-navy);margin-right:4px}
 #sian-ask .s-ah{font-size:12px;color:#777;margin-left:6px}
 @media(max-width:600px){#sian-ask .s-ah{display:block;margin:4px 0 0}}
+#s_atel{width:220px;max-width:100%}
+.typeProduct .s-pinf{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:#444}.typeProduct .s-pinf b{color:#888;font-weight:500;margin-right:2px}

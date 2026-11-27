@@ -71,7 +71,7 @@
   /* 상품 문의(재고·납기·가격·규격) — 사용자 결정 2026-11-26: 문의 단추 -> 카페24 '상품 Q&A'(6번) 비밀글, 연락받을 번호(카페24 이메일 칸 옆에 한 칸 추가)를 본문 첫 줄 `[연락받을번호]`로 저장, 메일은 카페24 이메일 칸(writer_email).
      관리자가 답변하면 관리자 PC 프로그램(admin_ask.py)이 문자·메일로 회신. it = {pk, name, packing, no}, kind = 재고납기문의|가격문의|규격·COA 문의 */
   window.SIAN.ask = function (kind, it) {
-    try { sessionStorage.setItem('sian_ask', JSON.stringify({ kind: kind, pk: it.pk || '', name: it.name || '', packing: it.packing || '', t: Date.now() })); } catch (e) { }
+    try { sessionStorage.setItem('sian_ask', JSON.stringify({ kind: kind, pk: it.pk || '', name: it.name || '', packing: it.packing || '', cas: it.cas || '', content: it.content || '', state: it.state || '', no: it.no || '', t: Date.now() })); } catch (e) { }
     location.href = P + '/board/product/write.html?board_no=6' + (it.no ? '&product_no=' + it.no : '');
   };
   function askForm() {
@@ -83,14 +83,31 @@
     if (a.t && Date.now() - a.t > 3600e3) a = {};
     var kind = a.kind || '상품 문의';
     if (!sub.value) sub.value = '[' + kind + '] ' + [a.pk, a.name, a.packing].filter(Boolean).join(' ');
-    if (a.pk && /^<p><br><\/p>$|^$/.test(ed.html.get())) ed.html.set('<p>상품: ' + esc([a.pk, a.name, a.packing].filter(Boolean).join(' · ')) + '</p><p>필요 수량: </p><p>희망 납기: </p><p>문의 내용: </p>');
+    var lead = (kind === '재고납기문의') ? '<p>해당 상품은 국내 재고가 없는 상품으로 배송까지 7일부터 최대 8주 이상 소요될 수 있습니다.</p><p>문의를 통해 가능 일정을 확인해 주세요.</p><p><br></p>' : '';
+    if (a.pk && /^<p><br><\/p>$|^$/.test(ed.html.get())) ed.html.set(lead + '<p>상품: ' + esc([a.pk, a.name, a.packing].filter(Boolean).join(' · ')) + '</p><p>필요 수량: </p><p>희망 납기: </p><p>문의 내용: </p>');
+    // 본문 글자 조금 크게(편집기 iframe 안)
+    var fr = document.getElementById('content_IFRAME'), fd = fr && fr.contentDocument;
+    if (fd && !fd.getElementById('sian-fs')) { var st = fd.createElement('style'); st.id = 'sian-fs'; st.textContent = '.fr-view,.fr-view p{font-size:14px!important;line-height:1.7}'; fd.head.appendChild(st); }
+    // 공지사항·게시안함(관리자용) 숨김
+    ['notice0', 'is_post0'].forEach(function (id) { var e = document.getElementById(id); if (e) (e.closest('.ec-base-label') || e.parentNode).style.display = 'none'; });
+    // 상품 상자: 우리 정보(이미지·상품코드·CAS·상품명·함유량·용량), 상품상세보기 = 우리 상세, 상품정보선택(다른 상품 고르기)은 숨김
+    var pb = document.querySelector('.ec-base-box.typeProduct');
+    if (pb && a.pk) {
+      var img = pb.querySelector('#iPrdImg'); if (img) { img.src = window.SIAN.B + 'shop/img/' + (/액체|기체/.test(a.state) ? 'liquid' : 'solid') + '.svg'; img.onerror = null; img.style.objectFit = 'contain'; }
+      var nm = pb.querySelector('#sPrdName'); if (nm) nm.textContent = a.name;
+      var pr = pb.querySelector('.price'); if (pr) pr.innerHTML = '<span class="s-pinf">' + [['상품코드', a.pk], ['CAS', a.cas || '-'], ['함유량', a.content || '-'], ['용량', a.packing || '-']].map(function (x) { return '<span><b>' + x[0] + '</b> ' + esc(x[1]) + '</span>'; }).join('') + '</span>';
+      var det = a.no ? P + '/product/detail.html?product_no=' + a.no : '';
+      [].slice.call(pb.querySelectorAll('#aPrdLink, #aPrdNameLink, .thumbnail a')).forEach(function (l) { if (det) l.href = det; else l.removeAttribute('href'); });
+      var v = pb.querySelector('#iPrdView'); if (v && !det) v.style.display = 'none';
+      [].slice.call(pb.querySelectorAll('a[onclick*="product_popup"]')).forEach(function (l) { l.parentNode.style.display = 'none'; });
+    }
     var sec = document.getElementById('secure1'); if (sec) sec.click();   // 비밀글(연락받을 번호가 본문에 들어가므로)
     // 연락받을 번호 칸 하나만 추가(사용자 지시 2026-11-26): 카페24 '이메일' 줄 바로 아래(이메일 줄이 숨겨진 회원이면 작성자/제목 줄 아래)
     var rows = [].slice.call(form.querySelectorAll('tr')), th = function (r) { var h = r.querySelector('th'); return h ? h.textContent.replace(/\s/g, '') : ''; };
     var at = rows.filter(function (r) { return th(r) === '이메일' && getComputedStyle(r).display !== 'none'; })[0] ||
       rows.filter(function (r) { return th(r) === '작성자' && getComputedStyle(r).display !== 'none'; })[0] || sub.closest('tr');
     var tr = document.createElement('tr'); tr.id = 'sian-ask';
-    tr.innerHTML = '<th scope="row">연락받을 번호</th><td><input id="s_atel" type="tel" class="inputTypeText" placeholder="010-0000-0000" style="max-width:220px;width:100%"> <span class="s-ah">답변 등록을 문자로 알려 드립니다</span></td>';
+    tr.innerHTML = '<th scope="row">연락받을 번호</th><td><input id="s_atel" type="text" inputmode="tel" class="' + (sub.className || 'inputTypeText') + '" placeholder="010-0000-0000" maxlength="13"> <span class="s-ah">답변 등록을 문자로 알려 드립니다</span></td>';
     at.parentNode.insertBefore(tr, at.nextSibling);
     document.addEventListener('click', function (e) {
       var t = e.target.closest && e.target.closest('a[onclick*="form_submit"],button[onclick*="form_submit"]'); if (!t) return;
