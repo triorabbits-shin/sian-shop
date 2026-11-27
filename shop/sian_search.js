@@ -34,9 +34,10 @@
         var st = !it.price ? '<span class="s-st0">재고납기문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : it.stock === '재고납기문의' ? '<span class="s-st0">재고납기문의</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
         var doc = it.murl ? '<a class="s-doc2" href="' + it.murl + '" target="_blank">MSDS</a>' : '<span class="s-doc2 off">MSDS</span>';
         var buy = it.ban ? '<span class="s-cart off" title="판매하지 않는 물질(화학물질관리법 제18조)">판매불가</span>' : ask ? '<button type="button" class="s-cart q" data-ask="' + it.pk + '">문의</button>' : !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : (it.strict || !it.variant ? '<a class="s-cart" href="' + link + '" title="유해화학물질·환각물질은 상세에서 담기">담기</a>' : '<button type="button" class="s-cart" data-add="' + it.pk + '">담기</button>');
+        var qty = buy.indexOf('data-add=') >= 0 ? '<span class="s-qty"><button type="button" data-q="-1" aria-label="빼기">−</button><input type="number" min="1" max="999" value="1" inputmode="numeric" data-qty="' + it.pk + '" aria-label="수량"><button type="button" data-q="1" aria-label="더하기">+</button></span>' : '<span class="s-qx">-</span>';   // 수량(사용자 지시 2026-11-27, 기본 1)
         return '<tr><td>' + (it.ban ? '<span class="s-tag hz">판매불가</span>' : it.hz === 'Y' ? '<span class="s-tag hz">◆ 유해</span>' : '<span class="s-tag ok">◇ 일반</span>') + (it.hal ? '<span class="s-tag hal">19+</span>' : '') + (it.cls.indexOf('LIM') >= 0 ? '<span class="s-tag lim" title="' + esc(it.lim) + '">용도제한</span>' : '') + '<div class="s-mk3">' + esc(it.maker) + '</div></td>' +
           '<td class="s-cd">' + esc(it.pk) + '</td><td class="s-cd">' + esc(it.cas || '-') + '</td><td>' + nm + '<div class="s-sub2">' + esc([it.content, it.state].filter(Boolean).join(' · ')) + '</div></td>' +
-          '<td>' + esc(it.grade || '-') + '</td><td>' + esc(it.packing || '-') + '</td><td class="s-pr2">' + pr + '</td><td>' + st + '</td><td>' + doc + '</td><td>' + buy + '</td></tr>';
+          '<td>' + esc(it.grade || '-') + '</td><td>' + esc(it.packing || '-') + '</td><td class="s-pr2">' + pr + '</td><td>' + st + '</td><td>' + qty + '</td><td>' + doc + '</td><td>' + buy + '</td></tr>';
       }
       function table(key, title, list) {
         var size = 20, pages = Math.max(1, Math.ceil(list.length / size)); if (PAGE[key] > pages) PAGE[key] = pages;
@@ -49,7 +50,7 @@
         if (hi < pages) { if (hi < pages - 1) nums.push('<span class="s-dot">…</span>'); nums.push(btn(pages)); }
         var pg = pages < 2 ? '' : (cur > 1 ? btn(cur - 1, '‹', 'nav') : '') + nums.join('') + (cur < pages ? btn(cur + 1, '›', 'nav') : '');
         return '<div class="s-card"><div class="s-ch"><b>' + title + '</b><span>「' + esc(Q || '전체') + '」 ' + list.length.toLocaleString() + '건</span><span class="s-pg">' + pg + '</span></div>' +
-          (list.length ? '<div class="s-tw"><table class="s-tb"><thead><tr><th>구분/브랜드</th><th>제품코드</th><th>CAS</th><th>제품명</th><th>등급</th><th>포장</th><th>판매가</th><th>재고</th><th>정보</th><th>장바구니</th></tr></thead><tbody>' +
+          (list.length ? '<div class="s-tw"><table class="s-tb"><thead><tr><th>구분/브랜드</th><th>제품코드</th><th>CAS</th><th>제품명</th><th>등급</th><th>포장</th><th>판매가</th><th>재고</th><th>수량</th><th>정보</th><th>장바구니</th></tr></thead><tbody>' +
             list.slice((PAGE[key] - 1) * size, PAGE[key] * size).map(row).join('') + '</tbody></table></div>' + (pg ? '<div class="s-pgb"><span class="s-pg">' + pg + '</span></div>' : '') : '<div class="s-empty">조건에 맞는 상품이 없습니다.</div>') + '</div>';
       }
       function draw() {
@@ -71,9 +72,12 @@
           if (low) { var c = box.querySelector('.s-pg button[data-k="' + k + '"]'); c = c && c.closest('.s-card'); if (c) c.scrollIntoView({ block: 'start', behavior: 'smooth' }); } }; });
         box.querySelectorAll('[data-ask]').forEach(function (b) { b.onclick = function () {
           var it = items.filter(function (x) { return x.pk === b.dataset.ask; })[0]; if (it) S.ask('재고납기문의', it); }; });
+        box.querySelectorAll('.s-qty').forEach(function (w) { var n = w.querySelector('input');
+          w.querySelectorAll('[data-q]').forEach(function (b) { b.onclick = function () { n.value = Math.min(999, Math.max(1, (parseInt(n.value, 10) || 1) + +b.dataset.q)); }; });
+          n.onchange = function () { n.value = Math.min(999, Math.max(1, parseInt(n.value, 10) || 1)); }; });
         box.querySelectorAll('[data-add]').forEach(function (b) { b.onclick = function () {
           var it = items.filter(function (x) { return x.pk === b.dataset.add; })[0]; b.disabled = true; b.textContent = '담는 중';
-          S.addCart([{ no: it.no, variant: it.variant, name: it.name, price: it.price, qty: 1 }]).then(function () { b.disabled = false; b.textContent = '담기'; });
+          S.addCart([{ no: it.no, variant: it.variant, name: it.name, price: it.price, qty: Math.max(1, parseInt((b.closest('tr').querySelector('[data-qty]') || {}).value, 10) || 1) }]).then(function () { b.disabled = false; b.textContent = '담기'; });
         }; });
       }
       draw();
