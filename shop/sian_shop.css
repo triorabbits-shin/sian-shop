@@ -151,6 +151,7 @@
 #sian-home .s-pn:hover{color:var(--s-blue);text-decoration:underline}
 .s-pn.off{color:#5a6474;font-weight:600}
 .s-sub2{font-size:12px;color:var(--s-sub)}
+.s-syn{background:#fff3b0;color:#5c4a00;padding:1px 6px;border-radius:4px;font-size:11px;margin-right:2px}
 .s-pr2{white-space:nowrap}
 .s-pr2 del{display:block;font-size:11px;color:#9aa4b2}
 .s-pr2 b{color:var(--s-red)}

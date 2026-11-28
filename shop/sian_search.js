@@ -19,24 +19,24 @@
       var toks = Q.toLowerCase().split(/\s+/).filter(Boolean), ql = Q.toLowerCase();
       var hits = toks.length ? items.filter(function (it) { return toks.every(function (t) { return it.h.indexOf(t) >= 0; }); }) : items;
       var krHead = function (nm) { var w = String(nm || '').split(' '), i = 0; while (i < w.length && /[가-힣]/.test(w[i])) i++; return i && i < w.length ? [w.slice(0, i).join(' '), w.slice(i).join(' ')] : null; };
-      // 국문 동의어로만 걸린 상품: 맨 앞 국문 대표이름을 그 동의어로 바꿔 보여 줌(사용자 결정 2026-11-28). 영문 동의어는 그대로
+      // 동의어로 걸린 경우(사용자 결정 2026-11-28): 목록 제품명은 상품명 그대로, 걸린 동의어는 아래 작은 줄 맨 앞에 배경색으로.
+      // 검색물질 칩 = 국문 검색: 위 국문 동의어(없으면 상품명 국문) / 아래 상품명 영문, 영문 검색: 위 상품명 국문 / 아래 검색어 든 상품명 영문(없으면 영문 동의어)
+      var KQ = toks.some(function (t) { return /[가-힣]/.test(t); });
       hits.forEach(function (it) {
-        it.shown = it.name; it.alias = '';
-        var nml = it.name.toLowerCase(), miss = toks.filter(function (t) { return nml.indexOf(t) < 0 && /[가-힣]/.test(t); });
-        if (!miss.length) return;
-        var syns = String(it.syn || '').split('|').map(function (x) { return x.trim(); }).filter(function (x) { return /[가-힣]/.test(x) && miss.every(function (t) { return x.toLowerCase().indexOf(t) >= 0; }); });
-        if (!syns.length) return;
-        syns.sort(function (a, b) { return a.length - b.length; });
-        var m = krHead(it.name);
-        if (!m) return;
-        it.shown = syns[0] + ' ' + m[1]; it.alias = m[0];
-      });
-      // 검색물질(필터): 같은 CAS = 한 물질. 국문 = 보여 주는 이름(동의어 반영)의 앞 국문, 영문 = 그 뒤 영문 물질명(함량 앞까지)
-      hits.forEach(function (it) {
-        var nmv = it.shown || it.name, m = krHead(nmv);
-        it.subKr = m ? m[0] : ''; var rest = m ? m[1] : nmv;
-        it.subEn = rest.split(/,?\s+(?=[\d<>≥~]|\()/)[0].replace(/[,\s]+$/, '');
-        it.subKey = /^\d{2,7}-\d\d-\d$/.test(it.cas || '') ? it.cas : (it.subKr || it.subEn || it.pk);
+        var nml = it.name.toLowerCase(), miss = toks.filter(function (t) { return nml.indexOf(t) < 0; });
+        var m = krHead(it.name), kr = m ? m[0] : '', rest = m ? m[1] : it.name;
+        var en = rest.split(/,?\s+(?=[\d<>≥~]|\()/)[0].replace(/[,\s]+$/, '');
+        it.hitSyn = '';
+        if (miss.length) {
+          var syns = String(it.syn || '').split('|').map(function (x) { return x.trim(); }).filter(function (x) { var xl = x.toLowerCase(); return x && miss.every(function (t) { return xl.indexOf(t) >= 0; }); });
+          var pref = syns.filter(function (x) { return /[가-힣]/.test(x) === KQ; });
+          syns = (pref.length ? pref : syns).sort(function (a, b) { return a.length - b.length; });
+          it.hitSyn = syns[0] || '';
+        }
+        var hk = /[가-힣]/.test(it.hitSyn);
+        if (KQ) { it.subKr = (it.hitSyn && hk ? it.hitSyn : kr); it.subEn = en; }
+        else { it.subKr = kr; it.subEn = (it.hitSyn && !hk && toks.some(function (t) { return en.toLowerCase().indexOf(t) < 0; })) ? it.hitSyn : en; }
+        it.subKey = /^\d{2,7}-\d\d-\d$/.test(it.cas || '') ? it.cas : (kr || en || it.pk);
       });
       var SUBL = {};
       hits.forEach(function (it) { var L = SUBL[it.subKey] = SUBL[it.subKey] || { kr: {}, en: {} }; if (it.subKr) L.kr[it.subKr] = (L.kr[it.subKr] || 0) + 1; if (it.subEn) L.en[it.subEn] = (L.en[it.subEn] || 0) + 1; });
@@ -51,7 +51,7 @@
       function won(n) { return n ? Number(n).toLocaleString('ko-KR') + '원' : ''; }
       function row(it) {
         var link = it.no ? P + '/product/detail.html?product_no=' + it.no : '';
-        var nm = (link ? '<a class="s-pn" href="' + link + '">' + esc(it.shown || it.name) + '</a>' : '<span class="s-pn off" title="상품 등록 준비중">' + esc(it.shown || it.name) + '</span>') + (it.alias ? '<div class="s-alias">대표명 ' + esc(it.alias) + '</div>' : '');
+        var nm = (link ? '<a class="s-pn" href="' + link + '">' + esc(it.name) + '</a>' : '<span class="s-pn off" title="상품 등록 준비중">' + esc(it.name) + '</span>');
         var pr = it.price ? '<del>' + won(it.was) + '</del><b>' + won(it.price) + '</b>' : '<b>가격문의</b>';
         var ask = !it.ban && (!it.price || it.stock === '재고납기문의');   // 가격·재고 문의 상품(사용자 결정 2026-11-27)
         var st = !it.price ? '<span class="s-st0">재고납기문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : it.stock === '재고납기문의' ? '<span class="s-st0">재고납기문의</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
@@ -59,7 +59,7 @@
         var buy = it.ban ? '<span class="s-cart off" title="판매하지 않는 물질(화학물질관리법 제18조)">판매불가</span>' : ask ? '<button type="button" class="s-cart q" data-ask="' + it.pk + '">문의</button>' : !link ? '<span class="s-cart off" title="상품 등록 준비중">준비중</span>' : (!it.ok || it.stock === '재고없음') ? '<span class="s-cart off">품절</span>' : (it.strict || !it.variant ? '<a class="s-cart" href="' + link + '" title="유해화학물질·환각물질은 상세에서 담기">담기</a>' : '<button type="button" class="s-cart" data-add="' + it.pk + '">담기</button>');
         var qty = buy.indexOf('data-add=') >= 0 ? '<span class="s-qty"><button type="button" data-q="-1" aria-label="빼기">−</button><input type="number" min="1" max="999" value="1" inputmode="numeric" data-qty="' + it.pk + '" aria-label="수량"><button type="button" data-q="1" aria-label="더하기">+</button></span>' : '<span class="s-qx">-</span>';   // 수량(사용자 지시 2026-11-27, 기본 1)
         return '<tr><td>' + (it.ban ? '<span class="s-tag hz">판매불가</span>' : it.hz === 'Y' ? '<span class="s-tag hz">◆ 유해</span>' : '<span class="s-tag ok">◇ 일반</span>') + (it.hal ? '<span class="s-tag hal">19+</span>' : '') + (it.cls.indexOf('LIM') >= 0 ? '<span class="s-tag lim" title="' + esc(it.lim) + '">용도제한</span>' : '') + '<div class="s-mk3">' + esc(it.maker) + '</div></td>' +
-          '<td class="s-cd">' + esc(it.pk) + '</td><td class="s-cd">' + esc(it.cas || '-') + '</td><td>' + nm + '<div class="s-sub2">' + esc([it.content, it.state].filter(Boolean).join(' · ')) + '</div></td>' +
+          '<td class="s-cd">' + esc(it.pk) + '</td><td class="s-cd">' + esc(it.cas || '-') + '</td><td>' + nm + '<div class="s-sub2">' + (it.hitSyn ? '<mark class="s-syn">' + esc(it.hitSyn) + '</mark> ' : '') + esc([it.content, it.state].filter(Boolean).join(' · ')) + '</div></td>' +
           '<td>' + esc(it.grade || '-') + '</td><td>' + esc(it.packing || '-') + '</td><td class="s-pr2">' + pr + '</td><td>' + st + '</td><td>' + qty + '</td><td>' + doc + '</td><td>' + buy + '</td></tr>';
       }
       function table(key, title, list) {
