@@ -43,7 +43,7 @@
       var top1 = function (o) { return Object.keys(o).sort(function (a, b) { return o[b] - o[a] || a.length - b.length; })[0] || ''; };
       Object.keys(SUBL).forEach(function (k) { SUBL[k] = { kr: top1(SUBL[k].kr), en: top1(SUBL[k].en) }; });
       hits.forEach(function (it) { var nm = it.name.toLowerCase(); it.score = (ql && (it.pk.toLowerCase() === ql || it.cas === ql) ? 100 : 0) + (ql && nm.indexOf(ql) >= 0 ? 20 : 0) + (ql && nm.indexOf(ql) === 0 ? 10 : 0); });
-      var SEL = {}, PAGE = { own: 1, imp: 1 }, MKMORE = false, SUBMORE = false;   // 제조사별은 '더보기'로 펼침(사용자 지시 2026-11-28)
+      var SEL = {}, PAGE = { own: 1, imp: 1 }, MKMORE = false, OPEN = {};   // OPEN: 검색물질·함유량·포장·등급 펼침(기본 2줄, 사용자 지시 2026-11-28)   // 제조사별은 '더보기'로 펼침(사용자 지시 2026-11-28)
       var G = [['sub', '검색물질', function (it) { return [it.subKey]; }], ['content', '함유량', function (it) { return it.content ? [it.content] : []; }], ['packing', '포장', function (it) { return [it.packing]; }],
         ['grade', '등급', function (it) { return it.grade ? it.grade.split(' | ') : []; }],
         ['origin', '제조사', function (it) { return [it.own ? '국내시약' : '해외시약']; }], ['maker', '', function (it) { return [it.maker]; }]];
@@ -90,14 +90,23 @@
             : function (v) { return '<button class="s-chip' + on(v) + '" data-g="' + g[0] + '" data-v="' + esc(v) + '">' + esc(v) + '<small>' + cnt[v] + '</small></button>'; };
           if (g[0] === 'maker' && !MKMORE && !(SEL.maker && SEL.maker.size)) return;
           var more = g[0] === 'origin' ? '<button type="button" class="s-more" data-more="1">' + (MKMORE || (SEL.maker && SEL.maker.size) ? '제조사 접기 ▴' : '제조사별 더보기 ▾') + '</button>' : '';
-          h += '<div class="s-fr' + (g[0] === 'maker' ? ' s-fr2' : '') + (g[0] === 'sub' && SUBMORE ? ' s-frscroll' : '') + '"><span>' + g[1] + '</span><div>' + (g[0] === 'sub' && SUBMORE ? vals : vals.slice(0, g[0] === 'sub' ? 12 : 40)).map(chip).join('') + more + (g[0] === 'sub' && vals.length > 12 ? '<button type="button" class="s-more" data-submore="1">' + (SUBMORE ? '검색물질 접기 ▴' : '검색물질 더보기 ▾ (' + vals.length.toLocaleString() + ')') + '</button>' : '') + '</div></div>';
+          var clip = ['sub', 'content', 'packing', 'grade'].indexOf(g[0]) >= 0;
+          h += '<div class="s-fr' + (g[0] === 'maker' ? ' s-fr2' : '') + (g[0] === 'sub' && OPEN.sub ? ' s-frscroll' : '') + '"' + (clip ? ' data-row="' + g[0] + '"' : '') + '><span>' + g[1] + '</span><div class="s-chips">' + vals.map(chip).join('') + more + '</div>' + (clip ? '<button type="button" class="s-more s-rmore" data-open="' + g[0] + '" hidden></button>' : '') + '</div>';
         });
         h += '</div>';
         var bad = function (x) { return (!x.price || !x.ok || x.stock === '재고없음' || x.stock === '재고납기문의') ? 1 : 0; };   // 재고없음·가격문의·재고납기문의는 맨 뒤(사용자 지시 2026-11-27)
         var list = filt(null).sort(function (a, b) { return bad(a) - bad(b) || b.score - a.score || (b.no ? 1 : 0) - (a.no ? 1 : 0) || a.pk.localeCompare(b.pk); });
         h += table('own', '국산시약', list.filter(function (x) { return x.own; })) + table('imp', '수입시약', list.filter(function (x) { return !x.own; }));
         box.firstChild.innerHTML = h;
-        var sb = box.querySelector('[data-submore]'); if (sb) sb.onclick = function () { SUBMORE = !SUBMORE; draw(); };
+        // 2줄 넘는 칩은 숨기고 '더보기'(고른 칩은 항상 보임)
+        box.querySelectorAll('[data-row]').forEach(function (r) {
+          var g = r.dataset.row, cs = [].slice.call(r.querySelectorAll('.s-chips > .s-chip')), tops = [];
+          cs.forEach(function (c) { var t = c.offsetTop; if (tops.indexOf(t) < 0) tops.push(t); }); tops.sort(function (a, b) { return a - b; });
+          if (tops.length <= 2) return;
+          var b = r.querySelector('[data-open]'); b.hidden = false;
+          if (OPEN[g]) { b.textContent = '접기 ▴'; } else { var n = 0; cs.forEach(function (c) { if (c.offsetTop > tops[1] && !c.classList.contains('on')) { c.style.display = 'none'; n++; } }); b.textContent = '더보기 ▾ (' + n.toLocaleString() + ')'; }
+          b.onclick = function () { OPEN[g] = !OPEN[g]; draw(); };
+        });
         var mb = box.querySelector('[data-more]'); if (mb) mb.onclick = function () { MKMORE = !(MKMORE || (SEL.maker && SEL.maker.size)); if (!MKMORE && SEL.maker) SEL.maker.clear(); draw(); };
         box.querySelectorAll('.s-chip').forEach(function (b) { b.onclick = function () { var g = b.dataset.g, v = b.dataset.v; SEL[g] = SEL[g] || new Set(); SEL[g].has(v) ? SEL[g].delete(v) : SEL[g].add(v); PAGE = { own: 1, imp: 1 }; draw(); }; });
         box.querySelectorAll('.s-pg button').forEach(function (b) { b.onclick = function () { var low = !!b.closest('.s-pgb'), k = b.dataset.k; PAGE[k] = +b.dataset.p; draw();
