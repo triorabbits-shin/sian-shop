@@ -15,13 +15,13 @@
     var after = function () { var a = [], e = sec.nextElementSibling; for (; e; e = e.nextElementSibling) if (e !== R) a.push(e); return a; };
     var on = function () {
       if (side.parentNode === R) return;
-      side.parentNode.insertBefore(ph, side); R.appendChild(side); C.appendChild(R); C.classList.add('sian-rail-on');
+      side.parentNode.insertBefore(ph, side); R.appendChild(side); C.appendChild(R); C.classList.add('sian-rail-on'); document.documentElement.classList.add('sian-rail-on');
       after().forEach(function (e) { e.classList.add('sian-narrow'); });
       var g = box.querySelector('.s-pdg'); R.style.top = Math.max(0, g.getBoundingClientRect().top - C.getBoundingClientRect().top) + 'px';
     };
     var off = function () {
       if (side.parentNode !== R) return;
-      ph.parentNode.insertBefore(side, ph); ph.remove(); R.remove(); C.classList.remove('sian-rail-on');
+      ph.parentNode.insertBefore(side, ph); ph.remove(); R.remove(); C.classList.remove('sian-rail-on'); document.documentElement.classList.remove('sian-rail-on');
       after().forEach(function (e) { e.classList.remove('sian-narrow'); });
     };
     var set = function () { if (mq.matches) on(); else off(); };
