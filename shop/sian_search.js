@@ -18,6 +18,7 @@
       items.forEach(function (it) { it.h = [it.name, it.syn, it.cas, it.pk, it.maker, it.grade, it.content, it.packing].join('\n').toLowerCase(); });   // 포장(용량)도 검색(2026-11-28)
       var toks = Q.toLowerCase().split(/\s+/).filter(Boolean), ql = Q.toLowerCase();
       var hits = toks.length ? items.filter(function (it) { return toks.every(function (t) { return it.h.indexOf(t) >= 0; }); }) : items;
+      var krHead = function (nm) { var w = String(nm || '').split(' '), i = 0; while (i < w.length && /[가-힣]/.test(w[i])) i++; return i && i < w.length ? [w.slice(0, i).join(' '), w.slice(i).join(' ')] : null; };
       // 국문 동의어로만 걸린 상품: 맨 앞 국문 대표이름을 그 동의어로 바꿔 보여 줌(사용자 결정 2026-11-28). 영문 동의어는 그대로
       hits.forEach(function (it) {
         it.shown = it.name; it.alias = '';
@@ -26,14 +27,14 @@
         var syns = String(it.syn || '').split('|').map(function (x) { return x.trim(); }).filter(function (x) { return /[가-힣]/.test(x) && miss.every(function (t) { return x.toLowerCase().indexOf(t) >= 0; }); });
         if (!syns.length) return;
         syns.sort(function (a, b) { return a.length - b.length; });
-        var m = it.name.match(/^([^A-Za-z0-9(\[]+?)\s+(?=[A-Za-z0-9(\[])/);
+        var m = krHead(it.name);
         if (!m) return;
-        it.shown = syns[0] + it.name.slice(m[1].length); it.alias = m[1].trim();
+        it.shown = syns[0] + ' ' + m[1]; it.alias = m[0];
       });
       // 검색물질(필터): 같은 CAS = 한 물질. 국문 = 보여 주는 이름(동의어 반영)의 앞 국문, 영문 = 그 뒤 영문 물질명(함량 앞까지)
       hits.forEach(function (it) {
-        var nmv = it.shown || it.name, m = nmv.match(/^([^A-Za-z0-9(\[]+?)\s+(?=[A-Za-z0-9(\[])/);
-        it.subKr = m ? m[1].trim() : ''; var rest = m ? nmv.slice(m[0].length) : nmv;
+        var nmv = it.shown || it.name, m = krHead(nmv);
+        it.subKr = m ? m[0] : ''; var rest = m ? m[1] : nmv;
         it.subEn = rest.split(/,?\s+(?=[\d<>≥~]|\()/)[0].replace(/[,\s]+$/, '');
         it.subKey = /^\d{2,7}-\d\d-\d$/.test(it.cas || '') ? it.cas : (it.subKr || it.subEn || it.pk);
       });
