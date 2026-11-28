@@ -18,6 +18,18 @@
       items.forEach(function (it) { it.h = [it.name, it.syn, it.cas, it.pk, it.maker, it.grade, it.content].join('\n').toLowerCase(); });
       var toks = Q.toLowerCase().split(/\s+/).filter(Boolean), ql = Q.toLowerCase();
       var hits = toks.length ? items.filter(function (it) { return toks.every(function (t) { return it.h.indexOf(t) >= 0; }); }) : items;
+      // 국문 동의어로만 걸린 상품: 맨 앞 국문 대표이름을 그 동의어로 바꿔 보여 줌(사용자 결정 2026-11-28). 영문 동의어는 그대로
+      hits.forEach(function (it) {
+        it.shown = it.name; it.alias = '';
+        var nml = it.name.toLowerCase(), miss = toks.filter(function (t) { return nml.indexOf(t) < 0 && /[가-힣]/.test(t); });
+        if (!miss.length) return;
+        var syns = String(it.syn || '').split('|').map(function (x) { return x.trim(); }).filter(function (x) { return /[가-힣]/.test(x) && miss.every(function (t) { return x.toLowerCase().indexOf(t) >= 0; }); });
+        if (!syns.length) return;
+        syns.sort(function (a, b) { return a.length - b.length; });
+        var m = it.name.match(/^([^A-Za-z0-9(\[]+?)\s+(?=[A-Za-z0-9(\[])/);
+        if (!m) return;
+        it.shown = syns[0] + it.name.slice(m[1].length); it.alias = m[1].trim();
+      });
       hits.forEach(function (it) { var nm = it.name.toLowerCase(); it.score = (ql && (it.pk.toLowerCase() === ql || it.cas === ql) ? 100 : 0) + (ql && nm.indexOf(ql) >= 0 ? 20 : 0) + (ql && nm.indexOf(ql) === 0 ? 10 : 0); });
       var SEL = {}, PAGE = { own: 1, imp: 1 };
       var G = [['maker', '브랜드', function (it) { return [it.maker]; }], ['grade', '등급', function (it) { return it.grade ? it.grade.split(' | ') : []; }],
@@ -28,7 +40,7 @@
       function won(n) { return n ? Number(n).toLocaleString('ko-KR') + '원' : ''; }
       function row(it) {
         var link = it.no ? P + '/product/detail.html?product_no=' + it.no : '';
-        var nm = link ? '<a class="s-pn" href="' + link + '">' + esc(it.name) + '</a>' : '<span class="s-pn off" title="상품 등록 준비중">' + esc(it.name) + '</span>';
+        var nm = (link ? '<a class="s-pn" href="' + link + '">' + esc(it.shown || it.name) + '</a>' : '<span class="s-pn off" title="상품 등록 준비중">' + esc(it.shown || it.name) + '</span>') + (it.alias ? '<div class="s-alias">대표명 ' + esc(it.alias) + '</div>' : '');
         var pr = it.price ? '<del>' + won(it.was) + '</del><b>' + won(it.price) + '</b>' : '<b>가격문의</b>';
         var ask = !it.ban && (!it.price || it.stock === '재고납기문의');   // 가격·재고 문의 상품(사용자 결정 2026-11-27)
         var st = !it.price ? '<span class="s-st0">재고납기문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : it.stock === '재고납기문의' ? '<span class="s-st0">재고납기문의</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
