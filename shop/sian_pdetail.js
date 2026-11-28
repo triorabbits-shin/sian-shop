@@ -4,6 +4,29 @@
    아래 본문(유해물질 띠·물성·판정·MSDS·공공데이터·등급)은 상세설명의 sian_detail.js가 그림 */
 (function () {
   if (window.SIAN_PDETAIL) return; window.SIAN_PDETAIL = 1;
+  /* PC(1024px 이상): 오른쪽 구매 상자를 페이지 오른쪽 세로 띠로 옮겨 스크롤해도 보이게(sticky), 아래 탭·상세정보는 왼쪽 칸 폭으로(사용자 지시 2026-11-28).
+     모바일은 그대로 위아래로 쌓음 */
+  function rail(box) {
+    var C = document.getElementById('contents'), side = box.querySelector('.s-side'), sec = box.parentNode;
+    if (!C || !side || !sec) return;
+    var mq = window.matchMedia('(min-width: 1024px)'), ph = document.createElement('div'), R = document.createElement('div');
+    ph.className = 's-side-ph'; R.id = 'sian-rail';
+    while (sec.parentNode && sec.parentNode !== C) sec = sec.parentNode;
+    var after = function () { var a = [], e = sec.nextElementSibling; for (; e; e = e.nextElementSibling) if (e !== R) a.push(e); return a; };
+    var on = function () {
+      if (side.parentNode === R) return;
+      side.parentNode.insertBefore(ph, side); R.appendChild(side); C.appendChild(R); C.classList.add('sian-rail-on');
+      after().forEach(function (e) { e.classList.add('sian-narrow'); });
+      var g = box.querySelector('.s-pdg'); R.style.top = Math.max(0, g.getBoundingClientRect().top - C.getBoundingClientRect().top) + 'px';
+    };
+    var off = function () {
+      if (side.parentNode !== R) return;
+      ph.parentNode.insertBefore(side, ph); ph.remove(); R.remove(); C.classList.remove('sian-rail-on');
+      after().forEach(function (e) { e.classList.remove('sian-narrow'); });
+    };
+    var set = function () { if (mq.matches) on(); else off(); };
+    set(); if (mq.addEventListener) mq.addEventListener('change', set); else mq.addListener(set);
+  }
   function crc32(str) {
     var t = window.__crcT; if (!t) { t = []; for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } window.__crcT = t; }
     var b = new TextEncoder().encode(str), x = 0xFFFFFFFF; for (var i = 0; i < b.length; i++) x = t[(x ^ b[i]) & 0xFF] ^ (x >>> 8); return (x ^ 0xFFFFFFFF) >>> 0;
@@ -99,6 +122,7 @@
           if (off) { b.disabled = true; b.textContent = '재고없음'; return; }
           b.onclick = function () { var t = document.getElementById(b.className === 'c' ? 'actionCart' : 'actionBuy'); if (t) t.click(); };
         });
+        rail(box);
       });
     }).catch(function (e) { console.error('sian pdetail', e); });
   }

@@ -420,3 +420,9 @@
 #sian-pdf .s-pdfb{flex:1;overflow:auto;background:#525659;text-align:center}#sian-pdf .s-pdfb iframe{width:100%;height:100%;border:0;display:block}
 #sian-pdf .s-pdfb canvas{display:block;margin:8px auto;background:#fff;max-width:calc(100% - 16px)}#sian-pdf .s-load{color:#fff;padding:40px 16px}#sian-pdf .s-load a{color:#fff;text-decoration:underline}
 @media(max-width:768px){#sian-pdf{padding:0}#sian-pdf .s-pdfbox{border-radius:0}#sian-pdf .s-pbtn{padding:0 10px;font-size:13px}}
+/* 오른쪽 구매 상자 플로팅(PC) */
+#contents.sian-rail-on{position:relative}
+#sian-rail{position:absolute;right:0;bottom:0;width:360px}
+#sian-rail .s-side{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
+#contents.sian-rail-on .sian-narrow{margin-right:424px!important;max-width:calc(100% - 424px)!important;box-sizing:border-box}
+.s-side-ph{min-height:1px}
