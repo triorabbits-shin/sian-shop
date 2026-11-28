@@ -23,9 +23,11 @@
       // 검색물질 칩 = 국문 검색: 위 국문 동의어(없으면 상품명 국문) / 아래 상품명 영문, 영문 검색: 위 상품명 국문 / 아래 검색어 든 상품명 영문(없으면 영문 동의어)
       var KQ = toks.some(function (t) { return /[가-힣]/.test(t); });
       hits.forEach(function (it) {
-        var nml = it.name.toLowerCase(), miss = toks.filter(function (t) { return nml.indexOf(t) < 0; });
         var m = krHead(it.name), kr = m ? m[0] : '', rest = m ? m[1] : it.name;
         var en = rest.split(/,?\s+(?=[\d<>≥~]|\()/)[0].replace(/[,\s]+$/, '');
+        // '상품명에서 찾음' 기준 = 화면에 보이는 제품명(국문 + 영문). 끝의 두 번째 국문 이름 등으로 걸리면 동의어로 표시(2026-11-28)
+        var disp = (m ? kr + ' ' + en : it.name).toLowerCase(), other = [it.cas, it.pk, it.maker, it.grade, it.content, it.packing].join(' ').toLowerCase();
+        var miss = toks.filter(function (t) { return disp.indexOf(t) < 0 && other.indexOf(t) < 0; });
         it.krN = kr; it.enN = m ? en : '';
         it.hitSyn = '';
         if (miss.length) {
