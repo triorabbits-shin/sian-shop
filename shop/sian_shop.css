@@ -437,3 +437,11 @@ html.sian-pd-on .detail_tab ul.title_detail li.tab_open a{color:#fff!important;b
 html.sian-pd-on .detail_tab ul.title_detail li a span{display:inline-block;min-width:18px;height:18px;line-height:18px!important;padding:0 5px;border-radius:9px;font-size:11px!important;font-weight:600;background:#dfe5ee!important;color:var(--s-sub)!important;box-sizing:border-box}
 html.sian-pd-on .detail_tab ul.title_detail li.tab_open a span{background:rgba(255,255,255,.22)!important;color:#fff!important}
 @media(max-width:600px){html.sian-pd-on .detail_tab ul.title_detail{gap:2px;padding:3px!important}html.sian-pd-on .detail_tab ul.title_detail li a{height:34px!important;line-height:34px!important;font-size:12px!important;padding:0 4px!important;gap:3px}}
+/* 모바일 탭(.tabProduct) 같은 모양 */
+html.sian-pd-on .tabProduct{margin:20px 0 12px!important;padding:0 12px!important;border:0!important;background:transparent!important;height:auto!important}
+html.sian-pd-on .tabProduct ul{display:flex!important;gap:2px;margin:0!important;padding:3px!important;background:var(--s-bg)!important;border:1px solid var(--s-line)!important;border-radius:10px;box-sizing:border-box;height:auto!important}
+html.sian-pd-on .tabProduct ul li{flex:1;float:none!important;width:auto!important;margin:0!important;border:0!important;background:transparent!important}
+html.sian-pd-on .tabProduct ul li a{display:flex!important;align-items:center;justify-content:center;gap:3px;height:34px!important;line-height:34px!important;padding:0 4px!important;font-size:12px!important;font-weight:600;color:var(--s-sub)!important;background:transparent!important;border:0!important;border-radius:7px;white-space:nowrap}
+html.sian-pd-on .tabProduct ul li.selected a{color:#fff!important;background:var(--s-navy)!important}
+html.sian-pd-on .tabProduct ul li a span{display:inline-block;min-width:16px;height:16px;line-height:16px!important;padding:0 4px;border-radius:8px;font-size:10px!important;background:#dfe5ee!important;color:var(--s-sub)!important;box-sizing:border-box}
+html.sian-pd-on .tabProduct ul li.selected a span{background:rgba(255,255,255,.22)!important;color:#fff!important}
