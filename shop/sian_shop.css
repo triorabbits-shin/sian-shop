@@ -427,3 +427,13 @@
 #contents.sian-rail-on .sian-narrow{margin-right:424px!important;max-width:calc(100% - 424px)!important;box-sizing:border-box}
 .s-side-ph{min-height:1px}
 html.sian-rail-on #wrap{overflow:clip!important}   /* 스킨 #wrap overflow:hidden 이 sticky를 막음 -> clip(가로 넘침은 그대로 잘림) */
+/* 상세 아래 탭(카페24 .detail_tab) -> 우리 화면 모양(사용자 지시 2026-11-28) */
+html.sian-pd-on .detail_tab{margin:28px 0 16px!important;height:auto!important;border:0!important}
+html.sian-pd-on .detail_tab ul.title_detail{display:flex!important;gap:4px;height:auto!important;margin:0!important;padding:4px!important;background:var(--s-bg);border:1px solid var(--s-line)!important;border-radius:10px;box-sizing:border-box}
+html.sian-pd-on .detail_tab ul.title_detail li{flex:1;float:none!important;width:auto!important;height:auto!important;margin:0!important;border:0!important;background:transparent!important;border-radius:7px}
+html.sian-pd-on .detail_tab ul.title_detail li a{display:flex!important;align-items:center;justify-content:center;gap:6px;height:38px!important;line-height:38px!important;padding:0 8px!important;font-size:14px!important;font-weight:600;color:var(--s-sub)!important;background:transparent!important;border:0!important;border-radius:7px;text-decoration:none;white-space:nowrap}
+html.sian-pd-on .detail_tab ul.title_detail li a:hover{color:var(--s-navy)!important;background:#fff!important}
+html.sian-pd-on .detail_tab ul.title_detail li.tab_open a{color:#fff!important;background:var(--s-navy)!important;box-shadow:0 1px 3px rgba(15,39,71,.25)}
+html.sian-pd-on .detail_tab ul.title_detail li a span{display:inline-block;min-width:18px;height:18px;line-height:18px!important;padding:0 5px;border-radius:9px;font-size:11px!important;font-weight:600;background:#dfe5ee!important;color:var(--s-sub)!important;box-sizing:border-box}
+html.sian-pd-on .detail_tab ul.title_detail li.tab_open a span{background:rgba(255,255,255,.22)!important;color:#fff!important}
+@media(max-width:600px){html.sian-pd-on .detail_tab ul.title_detail{gap:2px;padding:3px!important}html.sian-pd-on .detail_tab ul.title_detail li a{height:34px!important;line-height:34px!important;font-size:12px!important;padding:0 4px!important;gap:3px}}
