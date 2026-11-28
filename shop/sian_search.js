@@ -30,12 +30,22 @@
         if (!m) return;
         it.shown = syns[0] + it.name.slice(m[1].length); it.alias = m[1].trim();
       });
+      // 검색물질(필터): 같은 CAS = 한 물질. 국문 = 보여 주는 이름(동의어 반영)의 앞 국문, 영문 = 그 뒤 영문 물질명(함량 앞까지)
+      hits.forEach(function (it) {
+        var nmv = it.shown || it.name, m = nmv.match(/^([^A-Za-z0-9(\[]+?)\s+(?=[A-Za-z0-9(\[])/);
+        it.subKr = m ? m[1].trim() : ''; var rest = m ? nmv.slice(m[0].length) : nmv;
+        it.subEn = rest.split(/,?\s+(?=[\d<>≥~]|\()/)[0].replace(/[,\s]+$/, '');
+        it.subKey = /^\d{2,7}-\d\d-\d$/.test(it.cas || '') ? it.cas : (it.subKr || it.subEn || it.pk);
+      });
+      var SUBL = {};
+      hits.forEach(function (it) { var L = SUBL[it.subKey] = SUBL[it.subKey] || { kr: {}, en: {} }; if (it.subKr) L.kr[it.subKr] = (L.kr[it.subKr] || 0) + 1; if (it.subEn) L.en[it.subEn] = (L.en[it.subEn] || 0) + 1; });
+      var top1 = function (o) { return Object.keys(o).sort(function (a, b) { return o[b] - o[a] || a.length - b.length; })[0] || ''; };
+      Object.keys(SUBL).forEach(function (k) { SUBL[k] = { kr: top1(SUBL[k].kr), en: top1(SUBL[k].en) }; });
       hits.forEach(function (it) { var nm = it.name.toLowerCase(); it.score = (ql && (it.pk.toLowerCase() === ql || it.cas === ql) ? 100 : 0) + (ql && nm.indexOf(ql) >= 0 ? 20 : 0) + (ql && nm.indexOf(ql) === 0 ? 10 : 0); });
-      var SEL = {}, PAGE = { own: 1, imp: 1 };
-      var G = [['maker', '브랜드', function (it) { return [it.maker]; }], ['grade', '등급', function (it) { return it.grade ? it.grade.split(' | ') : []; }],
-        ['packing', '포장', function (it) { return [it.packing]; }], ['state', '성상', function (it) { return [it.state || '미확인']; }],
-        ['flag', '재고·유해', function (it) { var a = []; if (it.ok && it.price && it.stock !== '재고없음' && it.stock !== '재고납기문의') a.push('재고 있음'); a.push(it.hz === 'Y' ? '유해화학물질' : '일반시약'); if (it.cls.indexOf('LIM') >= 0) a.push('용도제한'); if (it.hal) a.push('19세 이상(환각물질)'); if (it.msds) a.push('MSDS 있음'); return a; }],
-        ['band', '가격대', function (it) { if (!it.price) return ['가격문의']; for (var i = 0; i < BANDS.length; i++) if (it.price >= BANDS[i][1] && it.price < BANDS[i][2]) return [BANDS[i][0]]; return []; }]];
+      var SEL = {}, PAGE = { own: 1, imp: 1 }, MKMORE = false;   // 제조사별은 '더보기'로 펼침(사용자 지시 2026-11-28)
+      var G = [['sub', '검색물질', function (it) { return [it.subKey]; }], ['packing', '포장', function (it) { return [it.packing]; }],
+        ['grade', '등급', function (it) { return it.grade ? it.grade.split(' | ') : []; }],
+        ['origin', '제조사', function (it) { return [it.own ? '국내시약' : '해외시약']; }], ['maker', '', function (it) { return [it.maker]; }]];
       function filt(skip) { return hits.filter(function (it) { return G.every(function (g) { return g[0] === skip || !SEL[g[0]] || !SEL[g[0]].size || g[2](it).some(function (v) { return SEL[g[0]].has(v); }); }); }); }
       function won(n) { return n ? Number(n).toLocaleString('ko-KR') + '원' : ''; }
       function row(it) {
@@ -72,13 +82,21 @@
         G.forEach(function (g) {
           var cnt = {}; filt(g[0]).forEach(function (it) { g[2](it).forEach(function (v) { if (v) cnt[v] = (cnt[v] || 0) + 1; }); });
           var vals = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; }); if (!vals.length) return;
-          h += '<div class="s-fr"><span>' + g[1] + '</span><div>' + vals.slice(0, 16).map(function (v) { return '<button class="s-chip' + (SEL[g[0]] && SEL[g[0]].has(v) ? ' on' : '') + '" data-g="' + g[0] + '" data-v="' + esc(v) + '">' + esc(v) + '<small>' + cnt[v] + '</small></button>'; }).join('') + '</div></div>';
+          if (g[0] === 'origin') vals = ['국내시약', '해외시약'].filter(function (v) { return cnt[v]; });
+          var on = function (v) { return SEL[g[0]] && SEL[g[0]].has(v) ? ' on' : ''; };
+          var chip = g[0] === 'sub' ? function (v) { var L = SUBL[v] || {}; return '<button class="s-chip s-sub' + on(v) + '" data-g="sub" data-v="' + esc(v) + '"><span><b>' + esc(L.kr || L.en || v) + '</b><small>' + cnt[v] + '</small></span>' + (L.kr && L.en ? '<em>' + esc(L.en) + '</em>' : '') + '</button>'; }
+            : g[0] === 'origin' ? function (v) { return '<button class="s-chip s-org' + on(v) + '" data-g="origin" data-v="' + v + '">' + v + '<small>' + cnt[v] + '</small></button>'; }
+            : function (v) { return '<button class="s-chip' + on(v) + '" data-g="' + g[0] + '" data-v="' + esc(v) + '">' + esc(v) + '<small>' + cnt[v] + '</small></button>'; };
+          if (g[0] === 'maker' && !MKMORE && !(SEL.maker && SEL.maker.size)) return;
+          var more = g[0] === 'origin' ? '<button type="button" class="s-more" data-more="1">' + (MKMORE || (SEL.maker && SEL.maker.size) ? '제조사 접기 ▴' : '제조사별 더보기 ▾') + '</button>' : '';
+          h += '<div class="s-fr' + (g[0] === 'maker' ? ' s-fr2' : '') + '"><span>' + g[1] + '</span><div>' + vals.slice(0, g[0] === 'sub' ? 12 : 40).map(chip).join('') + more + '</div></div>';
         });
         h += '</div>';
         var bad = function (x) { return (!x.price || !x.ok || x.stock === '재고없음' || x.stock === '재고납기문의') ? 1 : 0; };   // 재고없음·가격문의·재고납기문의는 맨 뒤(사용자 지시 2026-11-27)
         var list = filt(null).sort(function (a, b) { return bad(a) - bad(b) || b.score - a.score || (b.no ? 1 : 0) - (a.no ? 1 : 0) || a.pk.localeCompare(b.pk); });
         h += table('own', '국산시약', list.filter(function (x) { return x.own; })) + table('imp', '수입시약', list.filter(function (x) { return !x.own; }));
         box.firstChild.innerHTML = h;
+        var mb = box.querySelector('[data-more]'); if (mb) mb.onclick = function () { MKMORE = !(MKMORE || (SEL.maker && SEL.maker.size)); if (!MKMORE && SEL.maker) SEL.maker.clear(); draw(); };
         box.querySelectorAll('.s-chip').forEach(function (b) { b.onclick = function () { var g = b.dataset.g, v = b.dataset.v; SEL[g] = SEL[g] || new Set(); SEL[g].has(v) ? SEL[g].delete(v) : SEL[g].add(v); PAGE = { own: 1, imp: 1 }; draw(); }; });
         box.querySelectorAll('.s-pg button').forEach(function (b) { b.onclick = function () { var low = !!b.closest('.s-pgb'), k = b.dataset.k; PAGE[k] = +b.dataset.p; draw();
           if (low) { var c = box.querySelector('.s-pg button[data-k="' + k + '"]'); c = c && c.closest('.s-card'); if (c) c.scrollIntoView({ block: 'start', behavior: 'smooth' }); } }; });
