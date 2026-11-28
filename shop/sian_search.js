@@ -15,7 +15,7 @@
       var items = rows.map(function (r) { return { variant: r[19], pk: r[0], name: r[1], syn: r[2], cas: r[3], maker: r[4], grade: r[5], content: r[6], packing: r[7], state: r[8], hz: r[9], sup: r[10],
         was: r[11], price: r[12], rate: r[13], stock: r[14], ok: r[15], msds: r[16], no: r[17], murl: r[18], own: !!OWN[r[4]], cls: r[20] || '', lim: r[21] || '' }; });
       items.forEach(function (it) { it.ban = it.cls.indexOf('BAN') >= 0; it.hal = it.cls.indexOf('HAL') >= 0; it.strict = it.hz === 'Y' || it.hal; });
-      items.forEach(function (it) { it.h = [it.name, it.syn, it.cas, it.pk, it.maker, it.grade, it.content].join('\n').toLowerCase(); });
+      items.forEach(function (it) { it.h = [it.name, it.syn, it.cas, it.pk, it.maker, it.grade, it.content, it.packing].join('\n').toLowerCase(); });   // 포장(용량)도 검색(2026-11-28)
       var toks = Q.toLowerCase().split(/\s+/).filter(Boolean), ql = Q.toLowerCase();
       var hits = toks.length ? items.filter(function (it) { return toks.every(function (t) { return it.h.indexOf(t) >= 0; }); }) : items;
       // 국문 동의어로만 걸린 상품: 맨 앞 국문 대표이름을 그 동의어로 바꿔 보여 줌(사용자 결정 2026-11-28). 영문 동의어는 그대로
