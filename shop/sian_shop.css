@@ -138,6 +138,9 @@
 .s-qty input{width:28px;height:22px;border:0;border-left:1px solid var(--s-line);border-right:1px solid var(--s-line);text-align:center;font-size:12px;-moz-appearance:textfield;padding:0}.s-qty input::-webkit-outer-spin-button,.s-qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.s-qx{color:#cbd5e1}
 .s-tb .s-qty button{width:18px!important;height:22px!important;min-width:0!important;font-size:12px!important;padding:0!important;line-height:22px!important}.s-tb .s-qty input{width:28px!important;height:22px!important;min-width:0!important;font-size:12px!important;padding:0!important}
 /* 목록 한 줄 새 배치(2026-11-28) */
+.s-tb td.s-gb,.s-tb th.s-gb{text-align:left;white-space:nowrap;width:1%}.s-tb .s-tags{display:flex;gap:4px;flex-wrap:wrap}
+.s-tb td.s-gb .s-code{margin-top:4px;font-size:11px;color:#7b8696}
+.s-tb .s-tag.ok{background:#fff;border:1px solid #a7d7b9;color:#1f8a4c;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:600}
 .s-tb td.s-nm,.s-tb th.s-nm{text-align:left;min-width:260px}
 .s-tb .s-l1{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.s-tb .s-l1 .s-pn{font-size:14px;font-weight:600;color:var(--s-text)}
 .s-tb .s-tag.hz{background:#fff;border:1px solid #f1b8b8;color:#d93a3a;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:600}
@@ -154,6 +157,7 @@
  .s-tb tr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 8px;padding:12px 10px;border-bottom:1px solid var(--s-line)}
  .s-tb td{display:block;padding:0!important;border:0!important}
  .s-tb td.s-nm{grid-column:1/-1;min-width:0}
+ .s-tb td.s-gb{grid-column:1/-1;display:flex!important;align-items:center;gap:8px;width:auto}.s-tb td.s-gb .s-code{margin:0}
  .s-tb td.s-pr2{grid-column:1/-1;text-align:left}
  .s-tb td.s-c{text-align:left}
 }

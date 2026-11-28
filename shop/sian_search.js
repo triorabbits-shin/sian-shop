@@ -62,12 +62,12 @@
         // 한 줄(사용자 지시 2026-11-28): 제품명(유해 태그 + 국문 + 영문) / 둘째 줄 제품코드 · [동의어] · CAS · 제조사 · 등급 | 함유량 | 포장 | 판매가 | 재고 | 수량 | 담기 | MSDS
         var title = (it.krN || it.enN) ? [it.krN, it.enN].filter(Boolean).join(' ') : it.name;
         var tn = link ? '<a class="s-pn" href="' + link + '">' + esc(title) + '</a>' : '<span class="s-pn off" title="상품 등록 준비중">' + esc(title) + '</span>';
-        var tags = (it.ban ? '<span class="s-tag hz">판매불가</span>' : it.hz === 'Y' ? '<span class="s-tag hz">유해</span>' : '') + (it.hal ? '<span class="s-tag hal">19+</span>' : '') + (it.cls.indexOf('LIM') >= 0 ? '<span class="s-tag lim" title="' + esc(it.lim) + '">용도제한</span>' : '');
-        var sub = '<span class="s-code">' + esc(it.pk) + '</span>' + (it.hitSyn ? '<mark class="s-syn">' + esc(it.hitSyn) + '</mark>' : '') + (it.cas ? '<span>CAS ' + esc(it.cas) + '</span>' : '') + '<span>' + esc(it.maker) + '</span>' + (it.grade ? '<span>' + esc(it.grade) + '</span>' : '');
+        var tags = (it.ban ? '<span class="s-tag hz">판매불가</span>' : it.hz === 'Y' ? '<span class="s-tag hz">유해</span>' : '<span class="s-tag ok">일반</span>') + (it.hal ? '<span class="s-tag hal">19+</span>' : '') + (it.cls.indexOf('LIM') >= 0 ? '<span class="s-tag lim" title="' + esc(it.lim) + '">용도제한</span>' : '');
+        var sub = (it.hitSyn ? '<mark class="s-syn">' + esc(it.hitSyn) + '</mark>' : '') + (it.cas ? '<span>CAS ' + esc(it.cas) + '</span>' : '') + '<span>' + esc(it.maker) + '</span>' + (it.grade ? '<span>' + esc(it.grade) + '</span>' : '');
         var dot = !it.price || !it.ok || it.stock === '재고없음' || it.stock === '재고납기문의' ? 'g' : /^10-|^\d-|^[1-9]$/.test(it.stock) ? 'o' : 'k';
         var stk = '<span class="s-stk ' + dot + '"><i></i>' + esc(!it.price ? '재고납기문의' : (!it.ok ? '재고없음' : it.stock)) + '</span>';
         var mds = it.murl ? '<a class="s-doc3" href="' + it.murl + '" target="_blank" title="MSDS 보기">📄 MSDS</a>' : '<span class="s-doc3 off">📄 MSDS</span>';
-        return '<tr><td class="s-nm">' + '<div class="s-l1">' + tags + tn + '</div><div class="s-l2">' + sub + '</div></td>' +
+        return '<tr><td class="s-gb"><div class="s-tags">' + tags + '</div><div class="s-code">' + esc(it.pk) + '</div></td><td class="s-nm">' + '<div class="s-l1">' + tn + '</div><div class="s-l2">' + sub + '</div></td>' +
           '<td class="s-c">' + esc(it.content || '-') + '</td><td class="s-c">' + esc(it.packing || '-') + '</td><td class="s-pr2">' + pr + '</td><td class="s-c">' + stk + '</td><td class="s-c">' + qty + '</td><td class="s-c">' + buy + '</td><td class="s-c">' + mds + '</td></tr>';
       }
       function table(key, title, list) {
@@ -81,7 +81,7 @@
         if (hi < pages) { if (hi < pages - 1) nums.push('<span class="s-dot">…</span>'); nums.push(btn(pages)); }
         var pg = pages < 2 ? '' : (cur > 1 ? btn(cur - 1, '‹', 'nav') : '') + nums.join('') + (cur < pages ? btn(cur + 1, '›', 'nav') : '');
         return '<div class="s-card"><div class="s-ch"><b>' + title + '</b><span>「' + esc(Q || '전체') + '」 ' + list.length.toLocaleString() + '건</span><span class="s-pg">' + pg + '</span></div>' +
-          (list.length ? '<div class="s-tw"><table class="s-tb"><thead><tr><th class="s-nm">제품명</th><th>함유량</th><th>포장</th><th>판매가</th><th>재고</th><th>수량</th><th>장바구니</th><th>MSDS</th></tr></thead><tbody>' +
+          (list.length ? '<div class="s-tw"><table class="s-tb"><thead><tr><th class="s-gb">구분</th><th class="s-nm">제품명</th><th>함유량</th><th>포장</th><th>판매가</th><th>재고</th><th>수량</th><th>장바구니</th><th>MSDS</th></tr></thead><tbody>' +
             list.slice((PAGE[key] - 1) * size, PAGE[key] * size).map(row).join('') + '</tbody></table></div>' + (pg ? '<div class="s-pgb"><span class="s-pg">' + pg + '</span></div>' : '') : '<div class="s-empty">조건에 맞는 상품이 없습니다.</div>') + '</div>';
       }
       function draw() {
