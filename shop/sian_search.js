@@ -100,10 +100,10 @@
         box.firstChild.innerHTML = h;
         // 2줄 넘는 칩은 숨기고 '더보기'(고른 칩은 항상 보임)
         box.querySelectorAll('[data-row]').forEach(function (r) {
-          var g = r.dataset.row, cs = [].slice.call(r.querySelectorAll('.s-chips > .s-chip')), tops = [];
+          var g = r.dataset.row, cs = [].slice.call(r.querySelectorAll('.s-chips > .s-chip')), tops = [], b = r.querySelector('[data-open]');
+          b.hidden = false; b.textContent = '더보기 ▾ (0000)';   // 단추 자리를 먼저 잡고 줄을 셈
           cs.forEach(function (c) { var t = c.offsetTop; if (tops.indexOf(t) < 0) tops.push(t); }); tops.sort(function (a, b) { return a - b; });
-          if (tops.length <= 2) return;
-          var b = r.querySelector('[data-open]'); b.hidden = false;
+          if (tops.length <= 2) { b.hidden = true; return; }
           if (OPEN[g]) { b.textContent = '접기 ▴'; } else { var n = 0; cs.forEach(function (c) { if (c.offsetTop > tops[1] && !c.classList.contains('on')) { c.style.display = 'none'; n++; } }); b.textContent = '더보기 ▾ (' + n.toLocaleString() + ')'; }
           b.onclick = function () { OPEN[g] = !OPEN[g]; draw(); };
         });
