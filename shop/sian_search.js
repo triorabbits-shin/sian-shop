@@ -53,7 +53,7 @@
       function row(it) {
         var link = it.no ? P + '/product/detail.html?product_no=' + it.no : '';
         var nm = (link ? '<a class="s-pn" href="' + link + '">' + esc(it.name) + '</a>' : '<span class="s-pn off" title="상품 등록 준비중">' + esc(it.name) + '</span>');
-        var pr = it.price ? '<del>' + won(it.was) + '</del><b>' + won(it.price) + '</b>' : '<b>가격문의</b>';
+        var pr = it.price ? '<span class="s-was"><del>' + won(it.was) + '</del>' + (it.rate ? '<em>' + it.rate + '%</em>' : '') + '</span><b>' + won(it.price) + '</b>' : '<b>가격문의</b>';
         var ask = !it.ban && (!it.price || it.stock === '재고납기문의');   // 가격·재고 문의 상품(사용자 결정 2026-11-27)
         var st = !it.price ? '<span class="s-st0">재고납기문의</span>' : (!it.ok || it.stock === '재고없음' ? '<span class="s-st0">재고없음</span>' : it.stock === '재고납기문의' ? '<span class="s-st0">재고납기문의</span>' : '<span class="s-st1">' + esc(it.stock) + '</span>');
         var doc = it.murl ? '<a class="s-doc2" href="' + it.murl + '" target="_blank">MSDS</a>' : '<span class="s-doc2 off">MSDS</span>';
