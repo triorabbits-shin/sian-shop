@@ -445,3 +445,4 @@ html.sian-pd-on .tabProduct ul li a{display:flex!important;align-items:center;ju
 html.sian-pd-on .tabProduct ul li.selected a{color:#fff!important;background:var(--s-navy)!important}
 html.sian-pd-on .tabProduct ul li a span{display:inline-block;min-width:16px;height:16px;line-height:16px!important;padding:0 4px;border-radius:8px;font-size:10px!important;background:#dfe5ee!important;color:var(--s-sub)!important;box-sizing:border-box}
 html.sian-pd-on .tabProduct ul li.selected a span{background:rgba(255,255,255,.22)!important;color:#fff!important}
+html.sian-pd-on .tabProduct ul li a span{position:static!important;top:auto!important;right:auto!important;margin:0!important}
